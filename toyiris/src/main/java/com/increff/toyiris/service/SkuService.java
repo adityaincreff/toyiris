@@ -5,6 +5,7 @@ import com.increff.toyiris.pojo.SkuPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 @Service
 public class SkuService {
@@ -33,5 +34,18 @@ public class SkuService {
             throw new ApiException("No such SKU exists.");
         }
         return skuPojo.getId();
+    }
+
+    public String selectById(int id) {
+        return skuDao.selectById(id).getSkuCode();
+    }
+
+    public HashMap<Integer,SkuPojo> selectAllMap() {
+        List<SkuPojo> list=skuDao.selectAll();
+        HashMap<Integer,SkuPojo> skuMap=new HashMap<Integer,SkuPojo>();
+        for(SkuPojo p:list){
+            skuMap.put(p.getId(),p);
+        }
+        return skuMap;
     }
 }

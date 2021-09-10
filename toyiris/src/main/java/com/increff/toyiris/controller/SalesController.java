@@ -30,7 +30,7 @@ public class SalesController {
 
     @ApiOperation(value = "Download errors")
     @RequestMapping(path = "/errors", method = RequestMethod.GET)
-    public void downloadErrors(HttpServletResponse response) throws ApiException {
+    public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
         salesDto.downloadErrors(response);
     }
     @ApiOperation(value="Display all sales")

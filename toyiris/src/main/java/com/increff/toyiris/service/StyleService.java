@@ -5,6 +5,7 @@ import com.increff.toyiris.pojo.StylePojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -41,5 +42,14 @@ public class StyleService {
 
     public List<StylePojo> selectAll() {
         return styleDao.selectAll();
+    }
+
+    public HashMap<Integer, StylePojo> selectAllMap() {
+        List<StylePojo> stylePojo=styleDao.selectAll();
+        HashMap<Integer,StylePojo> styleMap=new HashMap<Integer,StylePojo>();
+        for(StylePojo p:stylePojo){
+            styleMap.put(p.getId(),p);
+        }
+        return styleMap;
     }
 }

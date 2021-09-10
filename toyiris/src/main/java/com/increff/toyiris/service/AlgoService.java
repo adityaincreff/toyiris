@@ -18,7 +18,6 @@ public class AlgoService {
         algoParametersDao.add(inputPojo);
 
     }
-
     public AlgoInputPojo selectRecent() throws ApiException {
         List<AlgoInputPojo> list = algoParametersDao.selectAll();
         {

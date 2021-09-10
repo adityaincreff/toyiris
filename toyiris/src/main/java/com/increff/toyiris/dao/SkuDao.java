@@ -10,6 +10,7 @@ import java.util.List;
 public class SkuDao extends AbstractDao {
     private String SELECT="Select p from SkuPojo where p.skuCode=:skuCode";
     private String SELECT_ALL="Select p from SkuPojo";
+    private String SELECT_BY_ID = "Select p from SkuPojo p where p.id=:id";
     @Transactional
     public void add(SkuPojo skuPojo) {
         em().persist(skuPojo);
@@ -24,5 +25,11 @@ public class SkuDao extends AbstractDao {
     public List<SkuPojo> selectAll() {
         TypedQuery<SkuPojo> query = getQuery(SELECT_ALL, SkuPojo.class);
         return query.getResultList();
+    }
+
+    public SkuPojo selectById(int id) {
+        TypedQuery<SkuPojo> query = getQuery(SELECT_BY_ID, SkuPojo.class);
+        query.setParameter("id", id);
+        return getSingle(query);
     }
 }

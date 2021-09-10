@@ -34,4 +34,8 @@ public class StoreService {
         return storePojo.getId();
 
     }
+
+    public String selectById(int id) {
+        return storeDao.selectById(id).getBranch();
+    }
 }

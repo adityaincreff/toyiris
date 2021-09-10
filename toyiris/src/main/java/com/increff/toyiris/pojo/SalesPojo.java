@@ -56,11 +56,11 @@ public class SalesPojo {
         this.storeId = storeId;
     }
 
-    public double getQuantity() {
-        return quantity;
+    public int getQuantity() {
+        return (int) quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

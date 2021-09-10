@@ -3,6 +3,7 @@ package com.increff.toyiris.dto;
 import com.increff.toyiris.pojo.SalesPojo;
 import com.increff.toyiris.service.*;
 import com.increff.toyiris.util.DatatypeConversion;
+import com.increff.toyiris.util.FileUtil;
 import com.increff.toyiris.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class SalesDto {
         salesPojo.setStoreId(storeService.select(StringUtil.toLowerCaseTrim(dataArray.get(2))));
         salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(3)));
         salesPojo.setDiscount(DatatypeConversion.convertStringToDouble(dataArray.get(4)));
-        salesPojo.setQuantity(DatatypeConversion.convertStringToDouble(dataArray.get(5)));
+        salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(5)));
         return salesPojo;
     }
 
@@ -120,17 +121,25 @@ public class SalesDto {
     return true;
     }
 
-    public void downloadErrors(HttpServletResponse response) throws ApiException {
+    public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
         File file=new File("C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\sku-error.txt");
         if(file.exists()==false){
             throw new ApiException("Upload a file first.");
 
         }
+        FileUtil.downloadFile("error-files/sales-error", response);
     }
 
     public void selectAll(HttpServletResponse response) throws IOException {
-        List<SalesPojo> salesPojos=salesService.selectAll();
-        FileWriter fos=new FileWriter("");
+        List<SalesPojo> salesPojo = salesService.selectAll();
+        FileWriter fos = new FileWriter("files/downloads/sku.txt",false);
+        PrintWriter dos = new PrintWriter(fos);
+        dos.println("Date\tSku Code\tStore\tQuantity\tDiscount\tRevenue");
+        for(SalesPojo s:salesPojo){
+            dos.println(s.getDate().getDayOfMonth()+"/"+s.getDate().getMonthValue()+"/"+s.getDate().getYear()+'\t'+skuService.selectById(s.getSkuId())+'\t'+storeService.selectById(s.getStoreId())+'\t'+s.getQuantity()+'\t'+s.getDiscount()+'\t'+s.getRevenue());
+        }
+        fos.close();
+        FileUtil.downloadFile("downloads/sku",response);
 
     }
 }
