@@ -1,0 +1,1 @@
+Date	Sku Code	Store	Quantity	Discount	Revenue

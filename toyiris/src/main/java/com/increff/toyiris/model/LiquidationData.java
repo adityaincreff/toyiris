@@ -7,6 +7,16 @@ public class LiquidationData {
     private int cleanedQuantity;
     private double revenue;
     private double avgDiscount;
+    private double avgCleanedDiscount;
+
+    public double getAvgCleanedDiscount() {
+        return avgCleanedDiscount;
+    }
+
+    public void setAvgCleanedDiscount(double avgCleanedDiscount) {
+        this.avgCleanedDiscount = avgCleanedDiscount;
+    }
+
     private double cleanedRevenue;
 
     public LiquidationData(String category, String subCategory) {

@@ -12,6 +12,9 @@ import java.util.List;
 public class ReportService {
     @Autowired
     private ReportDao reportDao;
+    public void addLiquidation(LiquidationPojo liquidationPojo){
+        reportDao.addLiquidation(liquidationPojo);
+    }
     public List<LiquidationPojo> selectAllLiquidation() {
     return reportDao.selectAllLiquidation();
     }
@@ -22,5 +25,27 @@ public class ReportService {
 
     public List<GoodSizePojo> selectAllIdentification() {
         return reportDao.selectAllIdentification();
+    }
+
+    public void deleteLiquidation() {
+        reportDao.deleteLiquidation();
+
+    }
+
+    public void deleteIdentification() {
+        reportDao.deleteIdentification();
+    }
+
+    public void addIdentification(GoodSizePojo goodSizesPojo) {
+    reportDao.deleteIdentification();
+    reportDao.addIdentification(goodSizesPojo);
+    }
+
+    public void deleteNoos() {
+        reportDao.deleteNoos();
+    }
+
+    public void addNoos(NoosPojo noosPojo) {
+        reportDao.addNoos(noosPojo);
     }
 }
