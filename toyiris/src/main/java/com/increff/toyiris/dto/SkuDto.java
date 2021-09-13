@@ -26,21 +26,28 @@ public class SkuDto {
     private StyleService styleService;
 
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
-        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
+        System.out.println("s4");
+        if(file==null){
+            throw new ApiException("Upload a file first");
+        }
+        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String dataRow = TSVFile.readLine(); //Read First Line
+        System.out.println(dataRow);
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File Orientation is not correct");
 
         }
+        System.out.println("s1");
         boolean errors = scanFileForErrors(file);
         if (errors) {
             throw new ApiException("File contains some errors");
         }
-        dataRow=TSVFile.readLine();
-        while(dataRow !=null)
-        {
+        System.out.println("s2");
+        dataRow = TSVFile.readLine();
+        System.out.println("s3");
+        while (dataRow != null) {
             skuService.add(convertRowsToPojo(dataRow));
-            dataRow=TSVFile.readLine(); //Read next line
+            dataRow = TSVFile.readLine(); //Read next line
         }
     }
 
@@ -93,8 +100,12 @@ public class SkuDto {
             dataArray.add(st.nextElement().toString());
         }
         skuPojo.setSkuCode(dataArray.get(0));
+
         skuPojo.setStyleId(styleService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
         skuPojo.setSize(dataArray.get(2));
+        System.out.println(skuPojo.getSkuCode());
+        System.out.println(skuPojo.getSize());
+        System.out.println(skuPojo.getStyleId());
         return skuPojo;
 
     }
@@ -109,12 +120,21 @@ public class SkuDto {
     }
 
     private boolean checkFileHeading(String dataRow) {
-        StringTokenizer st = new StringTokenizer(dataRow, "/t");
+        StringTokenizer st = new StringTokenizer(dataRow, "\t");
         List<String> dataArray = new ArrayList<>();
+        System.out.println("s88");
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
+        System.out.println("s98");
+        System.out.println(dataArray.get(0));
+        System.out.println(dataArray.get(1));
+        System.out.println(dataArray.get(2));
+        System.out.println(dataArray.get(1).equals("Style Code"));
+        System.out.println(dataArray.get(0).equals("SKU"));
+        System.out.println(dataArray.get(2).equals("Size"));
         if (!dataArray.get(1).equals("Style Code") || !dataArray.get(0).equals("SKU") || !dataArray.get(2).equals("Size")) {
+            System.out.println("s66");
             return false;
         }
         return true;
@@ -122,27 +142,26 @@ public class SkuDto {
     }
 
     public void selectALL(HttpServletResponse response) throws IOException {
-    List<SkuPojo> skuPojo=skuService.selectAll();
-    FileWriter fos=new FileWriter("files/downloads/sku.txt",false);
-    PrintWriter dos=new PrintWriter(fos);
-    dos.println("SKU\tStyle Code\tSize");
-    for(SkuPojo s:skuPojo){
-    dos.print(s.getSkuCode() +'\t'+styleService.selectbyId(s.getStyleId())+'\t'+s.getSize());
-    dos.println();
-    }
-    fos.close();
-        FileUtil.downloadFile("downloads/sku",response);
+        List<SkuPojo> skuPojo = skuService.selectAll();
+        FileWriter fos = new FileWriter("files/downloads/sku.txt", false);
+        PrintWriter dos = new PrintWriter(fos);
+        dos.println("SKU\tStyle Code\tSize");
+        for (SkuPojo s : skuPojo) {
+            dos.print(s.getSkuCode() + '\t' + styleService.selectbyId(s.getStyleId()) + '\t' + s.getSize());
+            dos.println();
+        }
+        fos.close();
+        FileUtil.downloadFile("downloads/sku", response);
 
 
     }
 
     public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
-    File file=new File("C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\sales-error.txt");
-    if(file.exists()==false)
-    {
-        throw new ApiException("Upload a file first");
-    }
+        File file = new File("C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\sales-error.txt");
+        if (file.exists() == false) {
+            throw new ApiException("Upload a file first");
+        }
 
-    FileUtil.downloadFile("error-files/sales-error",response);
+        FileUtil.downloadFile("error-files/sales-error", response);
     }
 }

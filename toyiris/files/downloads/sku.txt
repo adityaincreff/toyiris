@@ -1,1 +1,3 @@
-Date	Sku Code	Store	Quantity	Discount	Revenue
+SKU	Style Code	Size
+abc123	style1	xl
+def123	style2	l

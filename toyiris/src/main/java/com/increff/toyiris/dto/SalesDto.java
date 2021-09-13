@@ -30,7 +30,7 @@ public class SalesDto {
     private StyleService styleService;
 
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
-        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
+        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String dataRow = TSVFile.readLine();
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File orientation is not correct.");
@@ -58,7 +58,7 @@ public class SalesDto {
         salesPojo.setStoreId(storeService.select(StringUtil.toLowerCaseTrim(dataArray.get(2))));
         salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(3)));
         salesPojo.setDiscount(DatatypeConversion.convertStringToDouble(dataArray.get(4)));
-        salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(5)));
+        salesPojo.setRevenue(DatatypeConversion.convertStringToDouble(dataArray.get(5)));
         return salesPojo;
     }
 
@@ -110,7 +110,7 @@ public class SalesDto {
     }
 
     private boolean checkFileHeading(String dataRow) {
-     StringTokenizer st=new StringTokenizer(dataRow);
+     StringTokenizer st=new StringTokenizer(dataRow,"\t");
      List<String>dataArray=new ArrayList<String>();
      while(st.hasMoreElements()){
         dataArray.add(st.nextElement().toString());

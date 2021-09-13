@@ -22,6 +22,9 @@ public class StoreDto {
     private StoreService storeService;
 
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
+        if(file==null){
+            throw new ApiException("Upload a file first");
+        }
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String dataRow = TSVFile.readLine();
         if (checkFileHeading(dataRow) == false) {
@@ -104,7 +107,7 @@ public class StoreDto {
     }
 
     private boolean checkFileHeading(String dataRow) {
-        StringTokenizer st = new StringTokenizer(dataRow);
+        StringTokenizer st = new StringTokenizer(dataRow,"\t");
         List<String> dataArray = new ArrayList<>();
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());

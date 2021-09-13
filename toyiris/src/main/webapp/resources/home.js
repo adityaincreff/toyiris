@@ -9,16 +9,20 @@ function getStoreUrl(){
 	console.log(baseUrl);
 	return baseUrl + "/api/store";
 }
+
 function getSkuUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	console.log(baseUrl);
 	return baseUrl + "/api/sku";
 }
+
 function getSalesUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	console.log(baseUrl);
 	return baseUrl + "/api/sales";
 }
+
+
 function resetUploadDialog(){
 	//Reset file name
 	var $file = $('#style-file');
@@ -30,6 +34,7 @@ function resetUploadDialog(){
 	errorData = [];
 
 }
+
 function displayUploadStyle(){
 
     resetUploadDialog();
@@ -49,6 +54,7 @@ function displayUploadSku(){
 function displayUploadSales(){
     $('#upload-sales-modal').modal('toggle');
 }
+
 function updateStyleFileName(){
     var $file = $('#style-file');
     var fileName = $file.val();
@@ -76,6 +82,8 @@ function updateSalesFileName(){
     fileName = fileName.substr(12);
     $('#sales-file-name').html(fileName);
 }
+
+
 function uploadFile($file, url){
     var file2 = $file[0].files[0];
     console.log(file2);
@@ -87,23 +95,24 @@ function uploadFile($file, url){
 
 const fileSuccessFx = function(data,fileName){
 
-    let blob = new Blob([data], { type: 'text;charset=utf-8;' });
-              // IE 10+
-    if(navigator.msSaveBlob) {
-        navigator.msSaveBlob(blob, fileName);
-        return;
-    }
-    let link = document.createElement("a");
-    // Browsers that support HTML5 download attribute
-    let url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", fileName);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url)
+      let blob = new Blob([data], { type: 'text;charset=utf-8;' });
+                // IE 10+
+      if(navigator.msSaveBlob) {
+          navigator.msSaveBlob(blob, fileName);
+          return;
+      }
+      let link = document.createElement("a");
+      // Browsers that support HTML5 download attribute
+      let url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", fileName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url)
 }
+
 function downloadFiles(url,fileName){
     ajaxRequest(url,'GET',1,fileSuccessFx,fileName);
     console.log("request made");
@@ -113,16 +122,15 @@ function downloadErrorFiles(url,fileName){
     url+="/errors";
     console.log(url);
     ajaxRequest(url,'GET',1,fileSuccessFx,fileName);
-    console.log("request made");}
+    console.log("request made");
+}
 
-
-
-    function init(){
-
+function init(){
     $('#upload-style').click(displayUploadStyle);
     $('#upload-store').click(displayUploadStore);
     $('#upload-sku').click(displayUploadSku);
     $('#upload-sales').click(displayUploadSales);
+
     $('#style-file').on('change', updateStyleFileName);
     $('#store-file').on('change', updateStoreFileName);
     $('#sku-file').on('change',updateSkuFileName);
@@ -142,4 +150,7 @@ function downloadErrorFiles(url,fileName){
     $('#download-errors-store').click(() => downloadFiles(getStoreUrl()+"/errors","Store_Errors"));
     $('#download-errors-sku').click(() => downloadFiles(getSkuUrl()+"/errors","Sku_Errors"));
     $('#download-errors-sales').click(() => downloadFiles(getSalesUrl()+"/errors","Sales_Errors"));
-    }
+
+}
+
+$(document).ready(init);

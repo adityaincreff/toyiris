@@ -8,8 +8,8 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 @Repository
 public class SkuDao extends AbstractDao {
-    private String SELECT="Select p from SkuPojo where p.skuCode=:skuCode";
-    private String SELECT_ALL="Select p from SkuPojo";
+    private String SELECT="Select p from SkuPojo p where p.skuCode=:skuCode";
+    private String SELECT_ALL="Select p from SkuPojo p";
     private String SELECT_BY_ID = "Select p from SkuPojo p where p.id=:id";
     @Transactional
     public void add(SkuPojo skuPojo) {

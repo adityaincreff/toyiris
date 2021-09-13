@@ -1,0 +1,3 @@
+Row Number	SKU	Style Code	Size	Error Message
+0	abc123	style1	xl	SKU already exists.
+1	def123	style2	l	SKU already exists.

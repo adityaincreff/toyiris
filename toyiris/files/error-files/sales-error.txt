@@ -1,0 +1,1 @@
+Row Number	Date	SKU	Branch	Quantity	Discount	Revenue	Error Message

@@ -1,0 +1,3 @@
+Style Code	Brand	Category	Sub-Category	MRP	Gender
+style1	b1	shirt	collared	1000.0	m
+style2	b2	shirt	collared	500.5	f

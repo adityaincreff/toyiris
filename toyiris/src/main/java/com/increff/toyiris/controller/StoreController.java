@@ -21,10 +21,10 @@ import java.io.IOException;
 public class StoreController {
     @Autowired
     private StoreDto storeDto;
-
     @ApiOperation(value="Adds stores")
     @RequestMapping(method= RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
+
         storeDto.add(file);
     }
     @ApiOperation(value="Download errors")
