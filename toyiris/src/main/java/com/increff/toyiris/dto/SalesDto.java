@@ -53,13 +53,22 @@ public class SalesDto {
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        salesPojo.setDate(convertStringToDate(dataArray.get(0)));
-        salesPojo.setSkuId(skuService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
-        salesPojo.setStoreId(storeService.select(StringUtil.toLowerCaseTrim(dataArray.get(2))));
-        salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(3)));
-        salesPojo.setDiscount(DatatypeConversion.convertStringToDouble(dataArray.get(4)));
-        salesPojo.setRevenue(DatatypeConversion.convertStringToDouble(dataArray.get(5)));
-        return salesPojo;
+        if(dataArray.size() < 6){
+            throw new ApiException("One or more fields are empty");
+        }
+        else if(dataArray.size()>6){
+            throw new ApiException("Extra fields are added.");
+        }
+        else {
+            salesPojo.setDate(convertStringToDate(dataArray.get(0)));
+            salesPojo.setSkuId(skuService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
+            salesPojo.setStoreId(storeService.select(StringUtil.toLowerCaseTrim(dataArray.get(2))));
+            salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(3)));
+            salesPojo.setDiscount(DatatypeConversion.convertStringToDouble(dataArray.get(4)));
+            salesPojo.setRevenue(DatatypeConversion.convertStringToDouble(dataArray.get(5)));
+            return salesPojo;
+
+        }
     }
 
     private LocalDate convertStringToDate(String date) {

@@ -43,30 +43,38 @@ public class StoreDto {
 
     }
 
-    private StorePojo convertRowsToPojo(String dataRow) {
+    private StorePojo convertRowsToPojo(String dataRow) throws ApiException {
         StringTokenizer st = new StringTokenizer(dataRow);
         StorePojo storePojo = new StorePojo();
         List<String> dataArray = new ArrayList<>();
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        storePojo.setBranch(StringUtil.toLowerCaseTrim(dataArray.get(0)));
-        storePojo.setCity(StringUtil.toLowerCaseTrim(dataArray.get(1)));
-        return storePojo;
-    }
+        if(dataArray.size()<2){
+            throw new ApiException("One or more fields empty");
+        }
+        else if(dataArray.size()>2){
+            throw new ApiException("Extra values added");
+        }else {
+            storePojo.setBranch(StringUtil.toLowerCaseTrim(dataArray.get(0)));
+            storePojo.setCity(StringUtil.toLowerCaseTrim(dataArray.get(1)));
+            return storePojo;
 
-    private boolean scanFileForErrors(MultipartFile file) throws IOException {
+        }}
+
+    private boolean scanFileForErrors(MultipartFile file) throws IOException, ApiException {
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         boolean ans = false;
         String dataRow = TSVFile.readLine();
         int rowNumber = 1;
         refreshFile();
+        dataRow= TSVFile.readLine();
         FileWriter fos = new FileWriter("files/error-files/store-error.txt", true);
         PrintWriter dos = new PrintWriter(fos);
         while (dataRow != null) {
-            StorePojo dataConverted = convertRowsToPojo(dataRow);
-            dataConverted = normalize(dataConverted);
             try {
+                StorePojo dataConverted = convertRowsToPojo(dataRow);
+                dataConverted = normalize(dataConverted);
                 check(dataConverted);
                 storeService.exists(dataConverted);
 

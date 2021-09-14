@@ -2012,3 +2012,7 @@ Caused by: java.lang.ClassNotFoundException: org.apache.commons.fileupload.FileI
 2021-09-13 11:40:59 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
 2021-09-13 11:41:07 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
 2021-09-13 11:41:07 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
+2021-09-13 19:12:30 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-13 19:12:30 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
+2021-09-13 20:12:01 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-13 20:12:01 ERROR SqlExceptionHelper:142 - Duplicate entry '2019-12-11-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'

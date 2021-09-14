@@ -54,8 +54,6 @@ public class StyleDto {
         PrintWriter dos = new PrintWriter(fos);
         while (dataRow != null) {
             try {
-
-
                 styleService.exists(convertRowsToPojo(dataRow));
             } catch (ApiException e) {
                 String x = dataRow + '\t' + e.getMessage();
@@ -105,20 +103,27 @@ public class StyleDto {
     }
 
     public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
-    File file=new File("\"C:\\\\Users\\\\user\\\\IdeaProjects\\\\toyiris\\\\files\\\\error-files\\\\style-error.txt");
+    File file=new File("C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\style-error.txt");
     if(file.exists()==false){
         throw new ApiException("Upload file first");
     }
-    FileUtil.downloadFile("error files/style-error",response);
+    FileUtil.downloadFile("error-files/style-error",response);
     }
 
 
-    private StylePojo convertRowsToPojo(String dataRow) {
+    private StylePojo convertRowsToPojo(String dataRow) throws ApiException {
         StringTokenizer st = new StringTokenizer(dataRow, "\t");
         StylePojo stylePojo = new StylePojo();
         List<String> dataArray = new ArrayList<String>();
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
+        }
+        if(dataArray.size()<6)
+        {
+            throw new ApiException("One or more fields empty.");
+        }
+        else if(dataArray.size()>6){
+            throw new ApiException("Extra fields added");
         }
         stylePojo.setStyleCode(StringUtil.toLowerCaseTrim(dataArray.get(0)));
         stylePojo.setBrand(StringUtil.toLowerCaseTrim(dataArray.get(1)));

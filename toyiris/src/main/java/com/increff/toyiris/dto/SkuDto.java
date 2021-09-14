@@ -32,19 +32,16 @@ public class SkuDto {
         }
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String dataRow = TSVFile.readLine(); //Read First Line
-        System.out.println(dataRow);
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File Orientation is not correct");
 
         }
-        System.out.println("s1");
+
         boolean errors = scanFileForErrors(file);
         if (errors) {
             throw new ApiException("File contains some errors");
         }
-        System.out.println("s2");
         dataRow = TSVFile.readLine();
-        System.out.println("s3");
         while (dataRow != null) {
             skuService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine(); //Read next line
@@ -99,15 +96,18 @@ public class SkuDto {
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        skuPojo.setSkuCode(dataArray.get(0));
+        if(dataArray.size()<3){
+            throw new ApiException("One or more fields empty");
+        }
+        else if(dataArray.size()>3){
+            throw new ApiException("Extra values added.");
+        }else {
+            skuPojo.setSkuCode(dataArray.get(0));
 
-        skuPojo.setStyleId(styleService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
-        skuPojo.setSize(dataArray.get(2));
-        System.out.println(skuPojo.getSkuCode());
-        System.out.println(skuPojo.getSize());
-        System.out.println(skuPojo.getStyleId());
-        return skuPojo;
-
+            skuPojo.setStyleId(styleService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
+            skuPojo.setSize(dataArray.get(2));
+            return skuPojo;
+        }
     }
 
     private void refreshFile() throws IOException {
@@ -122,11 +122,9 @@ public class SkuDto {
     private boolean checkFileHeading(String dataRow) {
         StringTokenizer st = new StringTokenizer(dataRow, "\t");
         List<String> dataArray = new ArrayList<>();
-        System.out.println("s88");
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        System.out.println("s98");
         System.out.println(dataArray.get(0));
         System.out.println(dataArray.get(1));
         System.out.println(dataArray.get(2));
@@ -134,7 +132,6 @@ public class SkuDto {
         System.out.println(dataArray.get(0).equals("SKU"));
         System.out.println(dataArray.get(2).equals("Size"));
         if (!dataArray.get(1).equals("Style Code") || !dataArray.get(0).equals("SKU") || !dataArray.get(2).equals("Size")) {
-            System.out.println("s66");
             return false;
         }
         return true;
@@ -162,6 +159,6 @@ public class SkuDto {
             throw new ApiException("Upload a file first");
         }
 
-        FileUtil.downloadFile("error-files/sales-error", response);
+        FileUtil.downloadFile("error-files/sku-error", response);
     }
 }

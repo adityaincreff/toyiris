@@ -1,1 +1,2 @@
 Row Number	Date	SKU	Branch	Quantity	Discount	Revenue	Error Message
+0	11/12/2019		One or more fields are empty

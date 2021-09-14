@@ -1,3 +1,2 @@
-SKU	Style Code	Size
-abc123	style1	xl
-def123	style2	l
+Date	Sku Code	Store	Quantity	Discount	Revenue
+11/12/2019	abc123	b1	10	1000.5	4000.5
