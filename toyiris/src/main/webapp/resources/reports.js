@@ -26,9 +26,9 @@ function displayLiquidationReportData(data){
 		console.log(i);
 		var row = '<tr>'
 		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.subCategory + '</td>'
+		+ '<td>'  + e.subcategory + '</td>'
 		+ '<td>' + e.avgDiscount + '</td>'
-		+ '<td>' + e.avgDiscountAfterCleanup + '</td>'
+		+ '<td>' + e.avgCleanedDiscount + '</td>'
 		+ '<td>' + e.revenueCleanup + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -92,7 +92,7 @@ function displayGoodSizesReportData(data){
 		console.log(i);
 		var row = '<tr>'
 		+ '<td>'  + e.category + '</td>'
-		+ '<td>'  + e.subCategory + '</td>'
+		+ '<td>'  + e.subcategory + '</td>'
 		+ '<td>' + e.size + '</td>'
 		+ '<td>' + e.revContri + '</td>'
 		+ '<td>' + e.typeOfSizes + '</td>'

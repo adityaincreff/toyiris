@@ -1,3 +1,5 @@
 Row Number	Style Code	Brand	Category	Sub-Category	MRP	Gender	Error Message
-1	style4	b4	tshirt	checkish	700	M	Product with same Style Code already exists
-2		One or more fields empty.
+2	style1	br1	jeans	skinny	2000	m	Product with same Style Code already exists
+3	style1	br3	jeans						One or more fields empty.
+4	style2	br10	shirt	collared	5000	m	Product with same Style Code already exists
+6	style7									One or more fields empty.

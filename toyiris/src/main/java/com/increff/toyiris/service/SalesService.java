@@ -17,4 +17,11 @@ public class SalesService {
     public List<SalesPojo> selectAll() {
         return salesDao.selectAll();
     }
+
+    public void exists(SalesPojo dataConverted) throws ApiException {
+        SalesPojo salesPojo=salesDao.selectByDateSkuStore(dataConverted.getDate(),dataConverted.getSkuId(),dataConverted.getStoreId());
+        if(salesPojo!=null){
+            throw new ApiException("Sales for this date already exists");
+        }
+    }
 }

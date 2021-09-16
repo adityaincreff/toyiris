@@ -2016,3 +2016,93 @@ Caused by: java.lang.ClassNotFoundException: org.apache.commons.fileupload.FileI
 2021-09-13 19:12:30 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
 2021-09-13 20:12:01 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
 2021-09-13 20:12:01 ERROR SqlExceptionHelper:142 - Duplicate entry '2019-12-11-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-14 18:15:23 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-14 18:15:23 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
+2021-09-14 18:15:38 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-14 18:15:38 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
+2021-09-14 18:15:58 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-14 18:15:58 ERROR SqlExceptionHelper:142 - Field 'liquidationMultiplier' doesn't have a default value
+2021-09-14 18:16:18 WARN  SqlExceptionHelper:137 - SQL Error: 1146, SQLState: 42S02
+2021-09-14 18:16:18 ERROR SqlExceptionHelper:142 - Table 'toyiris.algoinputpojo' doesn't exist
+2021-09-16 16:55:10 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-16 16:55:10 ERROR SqlExceptionHelper:142 - Field 'avgDiscountAfterCleanup' doesn't have a default value
+2021-09-16 16:55:17 WARN  SqlExceptionHelper:137 - SQL Error: 1364, SQLState: HY000
+2021-09-16 16:55:17 ERROR SqlExceptionHelper:142 - Field 'avgDiscountAfterCleanup' doesn't have a default value
+2021-09-16 18:18:34 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 18:18:34 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 18:20:36 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 18:20:36 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 18:20:44 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 18:20:44 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 18:36:00 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 18:36:00 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 19:35:33 WARN  ExceptionHandlerExceptionResolver:391 - Failed to invoke @ExceptionHandler method: public com.increff.toyiris.model.MessageData com.increff.toyiris.controller.AppRestControllerAdvice.handle(java.lang.Throwable)
+org.eclipse.jetty.io.EofException
+	at org.eclipse.jetty.server.HttpConnection$SendCallback.reset(HttpConnection.java:718)
+	at org.eclipse.jetty.server.HttpConnection$SendCallback.access$300(HttpConnection.java:678)
+	at org.eclipse.jetty.server.HttpConnection.send(HttpConnection.java:537)
+	at org.eclipse.jetty.server.HttpChannel.sendResponse(HttpChannel.java:837)
+	at org.eclipse.jetty.server.HttpChannel.write(HttpChannel.java:914)
+	at org.eclipse.jetty.server.HttpOutput.write(HttpOutput.java:259)
+	at org.eclipse.jetty.server.HttpOutput.write(HttpOutput.java:235)
+	at org.eclipse.jetty.server.HttpOutput.flush(HttpOutput.java:499)
+	at com.fasterxml.jackson.core.json.UTF8JsonGenerator.flush(UTF8JsonGenerator.java:1100)
+	at com.fasterxml.jackson.databind.ObjectWriter.writeValue(ObjectWriter.java:915)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.writeInternal(AbstractJackson2HttpMessageConverter.java:285)
+	at org.springframework.http.converter.AbstractGenericHttpMessageConverter.write(AbstractGenericHttpMessageConverter.java:100)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor.writeWithMessageConverters(AbstractMessageConverterMethodProcessor.java:231)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.handleReturnValue(RequestResponseBodyMethodProcessor.java:174)
+	at org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite.handleReturnValue(HandlerMethodReturnValueHandlerComposite.java:81)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:132)
+	at org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver.doResolveHandlerMethodException(ExceptionHandlerExceptionResolver.java:384)
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodExceptionResolver.doResolveException(AbstractHandlerMethodExceptionResolver.java:59)
+	at org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver.resolveException(AbstractHandlerExceptionResolver.java:136)
+	at org.springframework.web.servlet.handler.HandlerExceptionResolverComposite.resolveException(HandlerExceptionResolverComposite.java:74)
+	at org.springframework.web.servlet.DispatcherServlet.processHandlerException(DispatcherServlet.java:1207)
+	at org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1030)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:980)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:897)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:790)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:760)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:547)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:143)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:536)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:235)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1589)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:233)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1296)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:188)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:485)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1559)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:186)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1211)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:221)
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:146)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:127)
+	at org.eclipse.jetty.server.Server.handle(Server.java:500)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$1(HttpChannel.java:386)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:560)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:378)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:268)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:311)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:103)
+	at org.eclipse.jetty.io.ChannelEndPoint$2.run(ChannelEndPoint.java:117)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.runTask(EatWhatYouKill.java:336)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.doProduce(EatWhatYouKill.java:313)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.tryProduce(EatWhatYouKill.java:171)
+	at org.eclipse.jetty.util.thread.strategy.EatWhatYouKill.produce(EatWhatYouKill.java:135)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:782)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:914)
+	at java.lang.Thread.run(Thread.java:748)
+2021-09-16 19:36:21 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 19:36:21 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-1-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 20:46:57 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 20:46:57 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-2-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'
+2021-09-16 20:48:17 WARN  SqlExceptionHelper:137 - SQL Error: 1062, SQLState: 23000
+2021-09-16 20:48:17 ERROR SqlExceptionHelper:142 - Duplicate entry '2021-09-14-2-1' for key 'UK6afxgtcm85jo5m5xrpt5e1w8b'

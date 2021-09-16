@@ -31,7 +31,7 @@ public class AlgoRunController {
         algoDto.addParameters(inputForm);
     }
 
-    @ApiOperation(value = "Retreives the parameters")
+    @ApiOperation(value = "Retrieves the parameters")
     @RequestMapping(path = "/input", method = RequestMethod.GET)
     public AlgoInputPojo getParameters() throws ApiException {
         return algoDto.getParameters();

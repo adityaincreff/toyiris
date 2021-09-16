@@ -22,9 +22,7 @@ public class StoreDto {
     private StoreService storeService;
 
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
-        if(file==null){
-            throw new ApiException("Upload a file first");
-        }
+
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         String dataRow = TSVFile.readLine();
         if (checkFileHeading(dataRow) == false) {
@@ -38,7 +36,6 @@ public class StoreDto {
         while (dataRow != null) {
             storeService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
-
         }
 
     }

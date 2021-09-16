@@ -1,2 +1,4 @@
 Row Number	Date	SKU	Branch	Quantity	Discount	Revenue	Error Message
-0	11/12/2019		One or more fields are empty
+1	14/09/2021	xxx	b2	50	5000	20000	No such SKU exists.
+2	14/09/2021	One or more fields are empty
+3	14/09/2021	def	b1	10	1000	10000	Sales for this date already exists

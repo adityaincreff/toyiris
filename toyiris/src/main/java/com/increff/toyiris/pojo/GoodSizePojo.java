@@ -13,8 +13,6 @@ public class GoodSizePojo {
     private String category;
     @Column(name = "subcategory")
     private String subcategory;
-    @Column(name="priceBucket")
-    private String priceBucket;
     @Column(name="size")
     private String size;
     @Column(name="revContri")
@@ -44,14 +42,6 @@ public class GoodSizePojo {
 
     public void setSubcategory(String subcategory) {
         this.subcategory = subcategory;
-    }
-
-    public String getPriceBucket() {
-        return priceBucket;
-    }
-
-    public void setPriceBucket(String priceBucket) {
-        this.priceBucket = priceBucket;
     }
 
     public String getSize() {

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"branch","city"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"branch"})}
 )
 public class StorePojo {
     @Id

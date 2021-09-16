@@ -1,5 +1,11 @@
 Branch	City
 b1	c1
+b10	c10
 b2	c2
 b3	c3
-b4	c1
+b4	c4
+b5	c5
+b6	c6
+b7	c7
+b8	c8
+b9	c9

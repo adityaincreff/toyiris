@@ -38,7 +38,10 @@ function addInputParameters(){
               closeOnClick: true
         });
 	}else{
-    ajaxRequest(url,'POST',json);
+        let successFx=function(){
+            successMessageDisplay("Algo inputs added.");
+        }
+    ajaxRequest(url,'POST',json,successFx);
     }
 }
 

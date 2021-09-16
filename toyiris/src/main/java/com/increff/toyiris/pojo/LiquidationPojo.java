@@ -11,7 +11,7 @@ public class LiquidationPojo {
     private String category;
     private String subcategory;
     private double avgDiscount;
-    private double avgDiscountAfterCleanup;
+    private double avgCleanedDiscount;
     private double revenueCleanup;
 
     public int getId() {
@@ -46,12 +46,12 @@ public class LiquidationPojo {
         this.avgDiscount = avgDiscount;
     }
 
-    public double getAvgDiscountAfterCleanup() {
-        return avgDiscountAfterCleanup;
+    public double getAvgCleanedDiscount() {
+        return avgCleanedDiscount;
     }
 
-    public void setAvgDiscountAfterCleanup(double avgDiscountAfterCleanup) {
-        this.avgDiscountAfterCleanup = avgDiscountAfterCleanup;
+    public void setAvgCleanedDiscount(double avgCleanedDiscount) {
+        this.avgCleanedDiscount = avgCleanedDiscount;
     }
 
     public double getRevenueCleanup() {

@@ -1,0 +1,7 @@
+jeans	skinny	0.0	0.0
+tshirt	collared	0.0	0.0
+shirt	collared	4000.5	20.00599880023995
+tshirt	check	0.0	0.0
+jacket	leather	0.0	0.0
+pant	bellbottom	0.0	0.0
+pant	cargo	0.0	0.0

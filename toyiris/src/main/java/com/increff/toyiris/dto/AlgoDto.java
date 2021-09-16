@@ -205,39 +205,53 @@ public class AlgoDto {
     }
 
 
-    private List<SalesData> liquidationCleanup(List<SalesData> salesData, double liquidationMultiplier) throws IOException {
-    List<SalesData> cleanedSales=new ArrayList<SalesData>();
-    HashMap<Pair<String,String>, LiquidationData> liquidationMap=new HashMap<Pair<String,String>,LiquidationData>();
-    for(SalesData sale : salesData){
-        Pair<String,String> catSubCatKey=new Pair<String,String>(sale.getCategory(),sale.getSubCategory());
-        LiquidationData data = liquidationMap.computeIfAbsent(catSubCatKey, o -> new LiquidationData(sale.getCategory(), sale.getSubCategory()));
-        data.setAvgDiscount(((sale.getQuantity() * sale.getDiscount()) + (data.getAvgDiscount() * data.getQuantity())) / (sale.getQuantity() + data.getQuantity()));
-        data.setRevenue(data.getRevenue()+sale.getRevenue());
-        data.setQuantity(data.getQuantity() + sale.getQuantity());
+    private List<SalesData> liquidationCleanup(List<SalesData> salesData, double multiplier) throws IOException {
+        List<SalesData> cleanedSales = new ArrayList<SalesData>();
+        HashMap<Pair<String, String>, LiquidationData> liquidationMap = new HashMap<Pair<String, String>, LiquidationData>();
 
-    }
-    for(SalesData sale:salesData){
-        Pair<String,String> catSubCat=new Pair<String,String>(sale.getCategory(),sale.getSubCategory());
-        LiquidationData catSubCatData=liquidationMap.get(catSubCat);
-        if(sale.getDiscount() <= catSubCatData.getAvgDiscount()){
-            cleanedSales.add(sale);
-            catSubCatData.setQuantity(catSubCatData.getQuantity());
-        } else{
-            catSubCatData.setAvgCleanedDiscount(((sale.getDiscount() * sale.getQuantity()) + (catSubCatData.getCleanedQuantity() * catSubCatData.getAvgCleanedDiscount())) / (sale.getQuantity() + catSubCatData.getCleanedQuantity()));
-            catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
-            catSubCatData.setCleanedRevenue(sale.getRevenue() + catSubCatData.getCleanedRevenue());
+        for (SalesData sale : salesData) {
+            Pair<String, String> catSubCatKey = new Pair<String, String>(sale.getCategory(), sale.getSubCategory());
+            LiquidationData data = liquidationMap.computeIfAbsent(catSubCatKey, o -> new LiquidationData(sale.getCategory(), sale.getSubCategory()));
+
+            data.setAvgDiscount(((sale.getQuantity() * sale.getDiscount()) + (data.getAvgDiscount() * data.getQuantity())) / (sale.getQuantity() + data.getQuantity()));
+            data.setRevenue(data.getRevenue() + sale.getRevenue());
+            data.setQuantity(data.getQuantity() + sale.getQuantity());
         }
-        liquidationMap.put(catSubCat,catSubCatData);
-    }
+
+        for (SalesData sale : salesData) {
+            Pair<String, String> catSubCat = new Pair<String, String>(sale.getCategory(), sale.getSubCategory());
+            LiquidationData catSubCatData = liquidationMap.get(catSubCat);
+
+            if (sale.getDiscount() <= catSubCatData.getAvgDiscount() * multiplier ) {
+                cleanedSales.add(sale);
+                catSubCatData.setQuantity(catSubCatData.getQuantity() + sale.getQuantity());
+            } else {
+                catSubCatData.setAvgCleanedDiscount(((sale.getDiscount() * sale.getQuantity()) + (catSubCatData.getCleanedQuantity() * catSubCatData.getAvgCleanedDiscount())) / (sale.getQuantity() + catSubCatData.getCleanedQuantity()));
+                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
+                catSubCatData.setCleanedRevenue(sale.getRevenue() + catSubCatData.getCleanedRevenue());
+            }
+            liquidationMap.put(catSubCat, catSubCatData);
+        }
+
         FileWriter fos = new FileWriter("files/algo-files/Liquidation_Cleanup_Report.txt", false);
-        PrintWriter dos=new PrintWriter(fos);
-        reportService.deleteLiquidation();
+        PrintWriter dos = new PrintWriter(fos);
+        reportService.deleteLiquidation();;
         for (Map.Entry mapElement : liquidationMap.entrySet()) {
             LiquidationData helper = (LiquidationData) mapElement.getValue();
             dos.println(helper.getCategory() + '\t' + helper.getSubCategory() + '\t' + helper.getCleanedRevenue() + "\t" + helper.getAvgCleanedDiscount());
             reportService.addLiquidation(convertDataToPojo(helper));
         }
         fos.close();
+        for (SalesData it : cleanedSales) {
+            System.out.println(it.getRevenue());
+        }
+//        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource.getDataSource());
+//        String dataFilepath = "C:\\projects\\Iris\\files\\algo-files\\Liquidation-Cleanup-Report.txt";
+//        String tableName = "liquidationpojo";
+//        String sql = "LOAD DATA LOCAL INFILE '" + dataFilepath + "' into table " + tableName;
+//
+//        jdbcTemplate.execute(sql);
+
         return cleanedSales;
     }
 
@@ -246,7 +260,7 @@ public class AlgoDto {
         converted.setCategory(data.getCategory());
         converted.setSubcategory(data.getSubCategory());
         converted.setAvgDiscount(data.getAvgDiscount());
-        converted.setAvgDiscountAfterCleanup(data.getAvgCleanedDiscount());
+        converted.setAvgCleanedDiscount(data.getAvgCleanedDiscount());
         converted.setRevenueCleanup(data.getCleanedRevenue());
         return converted;
     }

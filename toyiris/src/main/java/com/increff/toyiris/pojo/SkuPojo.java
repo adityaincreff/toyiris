@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"skuCode"}), @UniqueConstraint(columnNames = {"styleId", "size"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"skuCode"})}
 )
 public class SkuPojo {
     @Id

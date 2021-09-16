@@ -89,6 +89,7 @@ public class SalesDto {
             try {
                 SalesPojo dataConverted = convertRowsToPojo(dataRow);
                 check(dataConverted);
+                salesService.exists(dataConverted);
 
             } catch (ApiException e) {
                 dos.println(rowNumber + "\t" + dataRow + "\t" + e.getMessage());
