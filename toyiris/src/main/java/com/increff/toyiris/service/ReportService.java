@@ -37,7 +37,7 @@ public class ReportService {
     }
 
     public void addIdentification(GoodSizePojo goodSizesPojo) {
-    reportDao.deleteIdentification();
+
     reportDao.addIdentification(goodSizesPojo);
     }
 

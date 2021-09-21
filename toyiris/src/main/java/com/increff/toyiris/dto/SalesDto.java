@@ -53,6 +53,7 @@ public class SalesDto {
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
+
         if(dataArray.size() < 6){
             throw new ApiException("One or more fields are empty");
         }
@@ -106,8 +107,7 @@ public class SalesDto {
         if (dataConverted.getDate().isAfter(LocalDate.now())) {
             throw new ApiException("Sales date cannot be greater than today's date");
         }
-        if(dataConverted.getRevenue()<0 || dataConverted.getDiscount()<0 || dataConverted.getQuantity()<0)
-        {
+        if(dataConverted.getRevenue()<0 || dataConverted.getDiscount()<0 || dataConverted.getQuantity()<0) {
             throw new ApiException("Revenue,Discount or Quantity is negative");
         }
     }

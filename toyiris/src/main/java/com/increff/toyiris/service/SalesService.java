@@ -5,6 +5,7 @@ import com.increff.toyiris.pojo.SalesPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @Service
 public class SalesService {
@@ -17,7 +18,7 @@ public class SalesService {
     public List<SalesPojo> selectAll() {
         return salesDao.selectAll();
     }
-
+    @Transactional
     public void exists(SalesPojo dataConverted) throws ApiException {
         SalesPojo salesPojo=salesDao.selectByDateSkuStore(dataConverted.getDate(),dataConverted.getSkuId(),dataConverted.getStoreId());
         if(salesPojo!=null){

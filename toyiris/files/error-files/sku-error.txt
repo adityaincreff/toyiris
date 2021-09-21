@@ -1,6 +1,6 @@
 Row Number	SKU	Style Code	Size	Error Message
-0	abc					One or more fields empty
-2	abc	style10	small	SKU already exists.
-3	def					One or more fields empty
-4	mno	style9	l	SKU already exists.
-5	ggg	style26	m	No such product exists.
+0	abc	style1	l	SKU already exists.
+1	def	style2	xl	SKU already exists.
+2	rrr	One or more fields empty
+3	tzz	style7	l	12	Extra values added.
+4				xl	One or more fields empty

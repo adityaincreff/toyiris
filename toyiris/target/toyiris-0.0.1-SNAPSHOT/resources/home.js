@@ -86,6 +86,15 @@ function updateSalesFileName(){
 
 function uploadFile($file, url){
     var file2 = $file[0].files[0];
+    if(file2==null){
+     nativeToast({
+                  message: "File cannot be empty." ,
+                  position: 'north',
+                  timeout: 0,
+                  type: 'error',
+                  closeOnClick: true
+            });
+    }
     console.log(file2);
     formData = new FormData();
     formData.append("file",file2);

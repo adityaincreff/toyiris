@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"date","skuId","storeId"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"date","skuId", "storeId"})}
 )
 @Entity
 public class SalesPojo {

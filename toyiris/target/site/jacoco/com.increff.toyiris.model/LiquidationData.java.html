@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LiquidationData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToyIris</a> &gt; <a href="index.source.html" class="el_package">com.increff.toyiris.model</a> &gt; <span class="el_source">LiquidationData.java</span></div><h1>LiquidationData.java</h1><pre class="source lang-java linenums">package com.increff.toyiris.model;
+
+public class LiquidationData {
+    private String category;
+    private String subCategory;
+    private int quantity;
+    private int cleanedQuantity;
+    private double revenue;
+    private double avgDiscount;
+    private double avgCleanedDiscount;
+
+    public double getAvgCleanedDiscount() {
+<span class="nc" id="L13">        return avgCleanedDiscount;</span>
+    }
+
+    public void setAvgCleanedDiscount(double avgCleanedDiscount) {
+<span class="nc" id="L17">        this.avgCleanedDiscount = avgCleanedDiscount;</span>
+<span class="nc" id="L18">    }</span>
+
+    private double cleanedRevenue;
+
+<span class="nc" id="L22">    public LiquidationData(String category, String subCategory) {</span>
+<span class="nc" id="L23">        this.category=category;</span>
+<span class="nc" id="L24">        this.subCategory=subCategory;</span>
+<span class="nc" id="L25">    }</span>
+
+    public String getCategory() {
+<span class="nc" id="L28">        return category;</span>
+    }
+
+    public void setCategory(String category) {
+<span class="nc" id="L32">        this.category = category;</span>
+<span class="nc" id="L33">    }</span>
+
+    public String getSubCategory() {
+<span class="nc" id="L36">        return subCategory;</span>
+    }
+
+    public void setSubCategory(String subCategory) {
+<span class="nc" id="L40">        this.subCategory = subCategory;</span>
+<span class="nc" id="L41">    }</span>
+
+    public int getQuantity() {
+<span class="nc" id="L44">        return quantity;</span>
+    }
+
+    public void setQuantity(int quantity) {
+<span class="nc" id="L48">        this.quantity = quantity;</span>
+<span class="nc" id="L49">    }</span>
+
+    public int getCleanedQuantity() {
+<span class="nc" id="L52">        return cleanedQuantity;</span>
+    }
+
+    public void setCleanedQuantity(int cleanedQuantity) {
+<span class="nc" id="L56">        this.cleanedQuantity = cleanedQuantity;</span>
+<span class="nc" id="L57">    }</span>
+
+    public double getRevenue() {
+<span class="nc" id="L60">        return revenue;</span>
+    }
+
+    public void setRevenue(double revenue) {
+<span class="nc" id="L64">        this.revenue = revenue;</span>
+<span class="nc" id="L65">    }</span>
+
+    public double getAvgDiscount() {
+<span class="nc" id="L68">        return avgDiscount;</span>
+    }
+
+    public void setAvgDiscount(double avgDiscount) {
+<span class="nc" id="L72">        this.avgDiscount = avgDiscount;</span>
+<span class="nc" id="L73">    }</span>
+
+    public double getCleanedRevenue() {
+<span class="nc" id="L76">        return cleanedRevenue;</span>
+    }
+
+    public void setCleanedRevenue(double cleanedRevenue) {
+<span class="nc" id="L80">        this.cleanedRevenue = cleanedRevenue;</span>
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -8,6 +8,7 @@ import com.increff.toyiris.util.NumberUtil;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -71,11 +72,11 @@ public class AlgoDto {
         List<SalesPojo> list = salesService.selectAll();
         List<SalesData> salesData = convertIntoSalesData(list);
         List<SalesData> cleanedSales=liquidationCleanup(salesData,input.getLiquidationMultiplier());
-        noosReport(cleanedSales,input.getDate());
         goodSizes(cleanedSales,input.getGoodSize(),input.getBadSize());
+        noosReport(cleanedSales,input.getDate());
     }
 
-    private void goodSizes(List<SalesData> cleanedSales, double goodSize, double badSize) {
+    private void goodSizes(List<SalesData> cleanedSales, double goodSize, double badSize) throws IOException {
 
         //key->category,subCategory
         //value->sizeIdentificationData
@@ -87,7 +88,7 @@ public class AlgoDto {
             SizeIdentificationData helper = clubbing.computeIfAbsent(catSubCat,o-> new SizeIdentificationData());
             helper.setCategory(salesData.getCategory());
             helper.setSubCategory(salesData.getSubCategory());
-            helper.setRevenue(salesData.getRevenue());
+            helper.setRevenue(helper.getRevenue()+salesData.getRevenue());
 
         }
         //{Cat,SubCat,Size} -> GoodSizePojo
@@ -103,7 +104,7 @@ public class AlgoDto {
             helper.setSubcategory(salesData.getSubCategory());
             double addition=salesData.getRevenue()*100/clubbing.get(catSubCat).getRevenue();
             helper.setRevContri(helper.getRevContri()+addition);
-            if(helper.getRevContri() >=goodSize){
+            if(helper.getRevContri() >= goodSize){
                 helper.setTypeOfSizes("Good Size");
             }
             else if(helper.getRevContri() <=badSize){
@@ -113,16 +114,18 @@ public class AlgoDto {
                 helper.setTypeOfSizes("Average Size");
             }
             finalIdentification.put(sizeCat,helper);
-
+            System.out.println(helper);
 
         }
-
+        FileWriter fos = new FileWriter("files/algo-files/GoodSizes.txt", false);
+        PrintWriter dos = new PrintWriter(fos);
         reportService.deleteIdentification();
         for (Map.Entry mapElement : finalIdentification.entrySet()) {
             GoodSizePojo helper = (GoodSizePojo) mapElement.getValue();
+            dos.println(helper.getCategory() + '\t' + helper.getSubcategory() + '\t' + helper.getSize() + "\t" + helper.getRevContri()+ "\t" + helper.getTypeOfSizes());
             reportService.addIdentification(helper);
         }
-
+        fos.close();
 
     }
 
@@ -131,7 +134,7 @@ public class AlgoDto {
         HashMap<String, NoosData> noosCategoryDataMap=new HashMap<>();
         //key->style
         HashMap<String,NoosData> noosStyleDataMap=new HashMap<String,NoosData>();
-        cleanedSales = cleanedSales.stream().filter(sale -> sale.getDate().isBefore(input)).filter(sale -> sale.getDate().isAfter(input.minusMonths(6))).collect(Collectors.toList());
+        cleanedSales = cleanedSales.stream().filter(sale -> sale.getDate().isBefore(input.plusDays(1))).filter(sale -> sale.getDate().isAfter(input.minusMonths(6))).collect(Collectors.toList());
 
         //aggregate revenue to category level.
         //first sale day and last day for each category

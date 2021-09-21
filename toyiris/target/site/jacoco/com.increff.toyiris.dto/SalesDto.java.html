@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalesDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToyIris</a> &gt; <a href="index.source.html" class="el_package">com.increff.toyiris.dto</a> &gt; <span class="el_source">SalesDto.java</span></div><h1>SalesDto.java</h1><pre class="source lang-java linenums">package com.increff.toyiris.dto;
+
+import com.increff.toyiris.pojo.SalesPojo;
+import com.increff.toyiris.service.*;
+import com.increff.toyiris.util.DatatypeConversion;
+import com.increff.toyiris.util.FileUtil;
+import com.increff.toyiris.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+@Service
+<span class="fc" id="L22">public class SalesDto {</span>
+    @Autowired
+    private SalesService salesService;
+    @Autowired
+    private SkuService skuService;
+    @Autowired
+    private StoreService storeService;
+    @Autowired
+    private StyleService styleService;
+
+    public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
+<span class="nc" id="L33">        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));</span>
+<span class="nc" id="L34">        String dataRow = TSVFile.readLine();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (checkFileHeading(dataRow) == false) {</span>
+<span class="nc" id="L36">            throw new ApiException(&quot;File orientation is not correct.&quot;);</span>
+        }
+<span class="nc" id="L38">        boolean errors = scanFileForErrors(file);</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (errors == true) {</span>
+<span class="nc" id="L40">            throw new ApiException(&quot;File contains some errors&quot;);</span>
+        }
+<span class="nc" id="L42">        dataRow = TSVFile.readLine();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        while (dataRow != null) {</span>
+<span class="nc" id="L44">            salesService.add(convertRowsToPojo(dataRow));</span>
+<span class="nc" id="L45">            dataRow = TSVFile.readLine();</span>
+        }
+<span class="nc" id="L47">    }</span>
+
+    private SalesPojo convertRowsToPojo(String dataRow) throws ApiException {
+<span class="nc" id="L50">        StringTokenizer st = new StringTokenizer(dataRow);</span>
+<span class="nc" id="L51">        List&lt;String&gt; dataArray = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L52">        SalesPojo salesPojo = new SalesPojo();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        while (st.hasMoreElements()) {</span>
+<span class="nc" id="L54">            dataArray.add(st.nextElement().toString());</span>
+        }
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if(dataArray.size() &lt; 6){</span>
+<span class="nc" id="L58">            throw new ApiException(&quot;One or more fields are empty&quot;);</span>
+        }
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        else if(dataArray.size()&gt;6){</span>
+<span class="nc" id="L61">            throw new ApiException(&quot;Extra fields are added.&quot;);</span>
+        }
+        else {
+<span class="nc" id="L64">            salesPojo.setDate(convertStringToDate(dataArray.get(0)));</span>
+<span class="nc" id="L65">            salesPojo.setSkuId(skuService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));</span>
+<span class="nc" id="L66">            salesPojo.setStoreId(storeService.select(StringUtil.toLowerCaseTrim(dataArray.get(2))));</span>
+<span class="nc" id="L67">            salesPojo.setQuantity(DatatypeConversion.convertStringToInteger(dataArray.get(3)));</span>
+<span class="nc" id="L68">            salesPojo.setDiscount(DatatypeConversion.convertStringToDouble(dataArray.get(4)));</span>
+<span class="nc" id="L69">            salesPojo.setRevenue(DatatypeConversion.convertStringToDouble(dataArray.get(5)));</span>
+<span class="nc" id="L70">            return salesPojo;</span>
+
+        }
+    }
+
+    private LocalDate convertStringToDate(String date) {
+<span class="nc" id="L76">        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;d/MM/yyyy&quot;);</span>
+<span class="nc" id="L77">        return LocalDate.parse(date, formatter);</span>
+    }
+
+    private boolean scanFileForErrors(MultipartFile file) throws IOException {
+<span class="nc" id="L81">        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), &quot;UTF-8&quot;));</span>
+<span class="nc" id="L82">        boolean ans = false;</span>
+<span class="nc" id="L83">        String dataRow = TSVFile.readLine();</span>
+<span class="nc" id="L84">        int rowNumber = 0;</span>
+<span class="nc" id="L85">        refreshFile();</span>
+<span class="nc" id="L86">        dataRow = TSVFile.readLine();</span>
+<span class="nc" id="L87">        FileWriter fos = new FileWriter(&quot;files/error-files/sales-error.txt&quot;, true);</span>
+<span class="nc" id="L88">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        while (dataRow != null) {</span>
+            try {
+<span class="nc" id="L91">                SalesPojo dataConverted = convertRowsToPojo(dataRow);</span>
+<span class="nc" id="L92">                check(dataConverted);</span>
+<span class="nc" id="L93">                salesService.exists(dataConverted);</span>
+
+<span class="nc" id="L95">            } catch (ApiException e) {</span>
+<span class="nc" id="L96">                dos.println(rowNumber + &quot;\t&quot; + dataRow + &quot;\t&quot; + e.getMessage());</span>
+<span class="nc" id="L97">                ans = true;</span>
+<span class="nc" id="L98">            }</span>
+<span class="nc" id="L99">            rowNumber++;</span>
+<span class="nc" id="L100">            dataRow = TSVFile.readLine(); //READ NEXT LINE</span>
+        }
+<span class="nc" id="L102">        fos.close();</span>
+<span class="nc" id="L103">        return ans;</span>
+    }
+
+    private void check(SalesPojo dataConverted) throws ApiException {
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (dataConverted.getDate().isAfter(LocalDate.now())) {</span>
+<span class="nc" id="L108">            throw new ApiException(&quot;Sales date cannot be greater than today's date&quot;);</span>
+        }
+<span class="nc bnc" id="L110" title="All 6 branches missed.">        if(dataConverted.getRevenue()&lt;0 || dataConverted.getDiscount()&lt;0 || dataConverted.getQuantity()&lt;0) {</span>
+<span class="nc" id="L111">            throw new ApiException(&quot;Revenue,Discount or Quantity is negative&quot;);</span>
+        }
+<span class="nc" id="L113">    }</span>
+
+    private void refreshFile() throws IOException {
+<span class="nc" id="L116">        FileWriter fos = new FileWriter(&quot;files/error-files/sales-error.txt&quot;, false);</span>
+<span class="nc" id="L117">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L118">        dos.println(&quot;Row Number\tDate\tSKU\tBranch\tQuantity\tDiscount\tRevenue\tError Message&quot;);</span>
+<span class="nc" id="L119">        fos.close();</span>
+<span class="nc" id="L120">    }</span>
+
+    private boolean checkFileHeading(String dataRow) {
+<span class="nc" id="L123">     StringTokenizer st=new StringTokenizer(dataRow,&quot;\t&quot;);</span>
+<span class="nc" id="L124">     List&lt;String&gt;dataArray=new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">     while(st.hasMoreElements()){</span>
+<span class="nc" id="L126">        dataArray.add(st.nextElement().toString());</span>
+     }
+<span class="nc bnc" id="L128" title="All 12 branches missed.">    if(!dataArray.get(2).equals(&quot;Branch&quot;)|| !dataArray.get(1).equals(&quot;SKU&quot;) || !dataArray.get(3).equals(&quot;Quantity&quot;) || !dataArray.get(0).equals(&quot;Date&quot;) || !dataArray.get(4).equals(&quot;Discount&quot;) || !dataArray.get(5).equals(&quot;Revenue&quot;)){</span>
+<span class="nc" id="L129">     return false;</span>
+    }
+<span class="nc" id="L131">    return true;</span>
+    }
+
+    public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
+<span class="nc" id="L135">        File file=new File(&quot;C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\sku-error.txt&quot;);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if(file.exists()==false){</span>
+<span class="nc" id="L137">            throw new ApiException(&quot;Upload a file first.&quot;);</span>
+
+        }
+<span class="nc" id="L140">        FileUtil.downloadFile(&quot;error-files/sales-error&quot;, response);</span>
+<span class="nc" id="L141">    }</span>
+
+    public void selectAll(HttpServletResponse response) throws IOException {
+<span class="nc" id="L144">        List&lt;SalesPojo&gt; salesPojo = salesService.selectAll();</span>
+<span class="nc" id="L145">        FileWriter fos = new FileWriter(&quot;files/downloads/sku.txt&quot;,false);</span>
+<span class="nc" id="L146">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L147">        dos.println(&quot;Date\tSku Code\tStore\tQuantity\tDiscount\tRevenue&quot;);</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        for(SalesPojo s:salesPojo){</span>
+<span class="nc" id="L149">            dos.println(s.getDate().getDayOfMonth()+&quot;/&quot;+s.getDate().getMonthValue()+&quot;/&quot;+s.getDate().getYear()+'\t'+skuService.selectById(s.getSkuId())+'\t'+storeService.selectById(s.getStoreId())+'\t'+s.getQuantity()+'\t'+s.getDiscount()+'\t'+s.getRevenue());</span>
+<span class="nc" id="L150">        }</span>
+<span class="nc" id="L151">        fos.close();</span>
+<span class="nc" id="L152">        FileUtil.downloadFile(&quot;downloads/sku&quot;,response);</span>
+
+<span class="nc" id="L154">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

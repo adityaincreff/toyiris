@@ -83,7 +83,7 @@ public class SkuDto {
 
     }
 
-    private SkuPojo normalize(SkuPojo dataConverted) {
+    public SkuPojo normalize(SkuPojo dataConverted) {
         dataConverted.setSize(StringUtil.toLowerCaseTrim(dataConverted.getSize()));
         dataConverted.setSkuCode(StringUtil.toLowerCaseTrim(dataConverted.getSkuCode()));
         return dataConverted;
@@ -125,12 +125,7 @@ public class SkuDto {
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        System.out.println(dataArray.get(0));
-        System.out.println(dataArray.get(1));
-        System.out.println(dataArray.get(2));
-        System.out.println(dataArray.get(1).equals("Style Code"));
-        System.out.println(dataArray.get(0).equals("SKU"));
-        System.out.println(dataArray.get(2).equals("Size"));
+
         if (!dataArray.get(1).equals("Style Code") || !dataArray.get(0).equals("SKU") || !dataArray.get(2).equals("Size")) {
             return false;
         }

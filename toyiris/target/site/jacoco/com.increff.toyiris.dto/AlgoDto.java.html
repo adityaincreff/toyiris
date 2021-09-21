@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AlgoDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToyIris</a> &gt; <a href="index.source.html" class="el_package">com.increff.toyiris.dto</a> &gt; <span class="el_source">AlgoDto.java</span></div><h1>AlgoDto.java</h1><pre class="source lang-java linenums">package com.increff.toyiris.dto;
+
+import com.increff.toyiris.model.*;
+import com.increff.toyiris.pojo.*;
+import com.increff.toyiris.service.*;
+import com.increff.toyiris.util.DateUtil;
+import com.increff.toyiris.util.NumberUtil;
+import javafx.util.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L24">public class AlgoDto {</span>
+    @Autowired
+    private AlgoService algoService;
+    @Autowired
+    private SalesService salesService;
+    @Autowired
+    private SkuService skuService;
+    @Autowired
+    private StyleService styleService;
+    @Autowired
+    private ReportService reportService;
+
+
+    public void addParameters(InputForm inputForm) throws ApiException {
+<span class="nc" id="L38">        checkParameters(inputForm);</span>
+<span class="nc" id="L39">        AlgoInputPojo inputPojo = convertFormToPojo(inputForm);</span>
+<span class="nc" id="L40">        algoService.addParameters(inputPojo);</span>
+
+<span class="nc" id="L42">    }</span>
+
+    private AlgoInputPojo convertFormToPojo(InputForm inputForm) {
+<span class="nc" id="L45">        AlgoInputPojo inputs = new AlgoInputPojo();</span>
+<span class="nc" id="L46">        inputs.setLiquidationMultiplier(inputForm.getLiquidationMultiplier());</span>
+<span class="nc" id="L47">        inputs.setDate(inputForm.getDate());</span>
+<span class="nc" id="L48">        inputs.setBadSize(inputForm.getBadSize());</span>
+<span class="nc" id="L49">        inputs.setGoodSize(inputForm.getGoodSize());</span>
+<span class="nc" id="L50">        return inputs;</span>
+    }
+
+    private void checkParameters(InputForm inputForm) throws ApiException {
+<span class="nc bnc" id="L54" title="All 6 branches missed.">        if (NumberUtil.greaterThan100(inputForm.getLiquidationMultiplier()) || NumberUtil.greaterThan100(inputForm.getGoodSize()) || NumberUtil.greaterThan100(inputForm.getBadSize())) {</span>
+<span class="nc" id="L55">            throw new ApiException(&quot;Percentages cannot be greater than 100.&quot;);</span>
+        }
+<span class="nc bnc" id="L57" title="All 6 branches missed.">        if (NumberUtil.negative(inputForm.getLiquidationMultiplier()) || NumberUtil.negative(inputForm.getBadSize()) || NumberUtil.negative(inputForm.getGoodSize())) {</span>
+<span class="nc" id="L58">            throw new ApiException(&quot;Percentages cannot be negative&quot;);</span>
+        }
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (inputForm.getDate().isAfter(LocalDate.now())) {</span>
+<span class="nc" id="L61">            throw new ApiException(&quot;Cannot run algo for date after today's date&quot;);</span>
+        }
+
+<span class="nc" id="L64">    }</span>
+
+    public AlgoInputPojo getParameters() throws ApiException {
+<span class="nc" id="L67">        return algoService.selectRecent();</span>
+    }
+
+    public void algoRun() throws ApiException, IOException {
+<span class="nc" id="L71">        AlgoInputPojo input = algoService.selectRecent();</span>
+<span class="nc" id="L72">        List&lt;SalesPojo&gt; list = salesService.selectAll();</span>
+<span class="nc" id="L73">        List&lt;SalesData&gt; salesData = convertIntoSalesData(list);</span>
+<span class="nc" id="L74">        List&lt;SalesData&gt; cleanedSales=liquidationCleanup(salesData,input.getLiquidationMultiplier());</span>
+<span class="nc" id="L75">        goodSizes(cleanedSales,input.getGoodSize(),input.getBadSize());</span>
+<span class="nc" id="L76">        noosReport(cleanedSales,input.getDate());</span>
+<span class="nc" id="L77">    }</span>
+
+    private void goodSizes(List&lt;SalesData&gt; cleanedSales, double goodSize, double badSize) throws IOException {
+
+        //key-&gt;category,subCategory
+        //value-&gt;sizeIdentificationData
+<span class="nc" id="L83">        HashMap&lt;Pair&lt;String,String&gt;, SizeIdentificationData&gt; clubbing=new HashMap&lt;Pair&lt;String,String&gt;,SizeIdentificationData&gt;();</span>
+
+        //1.Aggregate revenue at category subcategory level
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        for(SalesData salesData:cleanedSales){</span>
+<span class="nc" id="L87">            Pair&lt;String, String&gt; catSubCat = new Pair&lt;String, String&gt;(salesData.getCategory(), salesData.getSubCategory());</span>
+<span class="nc" id="L88">            SizeIdentificationData helper = clubbing.computeIfAbsent(catSubCat,o-&gt; new SizeIdentificationData());</span>
+<span class="nc" id="L89">            helper.setCategory(salesData.getCategory());</span>
+<span class="nc" id="L90">            helper.setSubCategory(salesData.getSubCategory());</span>
+<span class="nc" id="L91">            helper.setRevenue(helper.getRevenue()+salesData.getRevenue());</span>
+
+<span class="nc" id="L93">        }</span>
+        //{Cat,SubCat,Size} -&gt; GoodSizePojo
+<span class="nc" id="L95">        HashMap&lt;Pair&lt;String, Pair&lt;String, String&gt;&gt;, GoodSizePojo&gt; finalIdentification = new HashMap&lt;Pair&lt;String, Pair&lt;String, String&gt;&gt;, GoodSizePojo&gt;();</span>
+
+        //Calculate percentage of each size
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for(SalesData salesData:cleanedSales){</span>
+<span class="nc" id="L99">            Pair&lt;String,String&gt;catSubCat=new Pair&lt;String,String&gt;(salesData.getCategory(), salesData.getSubCategory());</span>
+<span class="nc" id="L100">            Pair&lt;String, Pair&lt;String, String&gt;&gt; sizeCat = new Pair&lt;String, Pair&lt;String, String&gt;&gt;(salesData.getSize(), catSubCat);</span>
+<span class="nc" id="L101">            GoodSizePojo helper = finalIdentification.computeIfAbsent(sizeCat,o-&gt; new GoodSizePojo());</span>
+<span class="nc" id="L102">            helper.setCategory(salesData.getCategory());</span>
+<span class="nc" id="L103">            helper.setSize(salesData.getSize());</span>
+<span class="nc" id="L104">            helper.setSubcategory(salesData.getSubCategory());</span>
+<span class="nc" id="L105">            double addition=salesData.getRevenue()*100/clubbing.get(catSubCat).getRevenue();</span>
+<span class="nc" id="L106">            helper.setRevContri(helper.getRevContri()+addition);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if(helper.getRevContri() &gt;= goodSize){</span>
+<span class="nc" id="L108">                helper.setTypeOfSizes(&quot;Good Size&quot;);</span>
+            }
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            else if(helper.getRevContri() &lt;=badSize){</span>
+<span class="nc" id="L111">                helper.setTypeOfSizes(&quot;Bad Size&quot;);</span>
+            }
+            else{
+<span class="nc" id="L114">                helper.setTypeOfSizes(&quot;Average Size&quot;);</span>
+            }
+<span class="nc" id="L116">            finalIdentification.put(sizeCat,helper);</span>
+<span class="nc" id="L117">            System.out.println(helper);</span>
+
+<span class="nc" id="L119">        }</span>
+<span class="nc" id="L120">        FileWriter fos = new FileWriter(&quot;files/algo-files/GoodSizes.txt&quot;, false);</span>
+<span class="nc" id="L121">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L122">        reportService.deleteIdentification();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (Map.Entry mapElement : finalIdentification.entrySet()) {</span>
+<span class="nc" id="L124">            GoodSizePojo helper = (GoodSizePojo) mapElement.getValue();</span>
+<span class="nc" id="L125">            dos.println(helper.getCategory() + '\t' + helper.getSubcategory() + '\t' + helper.getSize() + &quot;\t&quot; + helper.getRevContri()+ &quot;\t&quot; + helper.getTypeOfSizes());</span>
+<span class="nc" id="L126">            reportService.addIdentification(helper);</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">        fos.close();</span>
+
+<span class="nc" id="L130">    }</span>
+
+    private void noosReport(List&lt;SalesData&gt; cleanedSales, LocalDate input) throws IOException {
+        //key-&gt;category
+<span class="nc" id="L134">        HashMap&lt;String, NoosData&gt; noosCategoryDataMap=new HashMap&lt;&gt;();</span>
+        //key-&gt;style
+<span class="nc" id="L136">        HashMap&lt;String,NoosData&gt; noosStyleDataMap=new HashMap&lt;String,NoosData&gt;();</span>
+<span class="nc" id="L137">        cleanedSales = cleanedSales.stream().filter(sale -&gt; sale.getDate().isBefore(input.plusDays(1))).filter(sale -&gt; sale.getDate().isAfter(input.minusMonths(6))).collect(Collectors.toList());</span>
+
+        //aggregate revenue to category level.
+        //first sale day and last day for each category
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        for(SalesData salesData:cleanedSales){</span>
+<span class="nc" id="L142">            NoosData noosData = noosCategoryDataMap.computeIfAbsent(salesData.getCategory(), o -&gt; new NoosData());</span>
+<span class="nc" id="L143">            noosData.setRevenue(noosData.getRevenue()+ salesData.getRevenue());</span>
+<span class="nc" id="L144">            noosData.setFirstSaleDay(getFirstSaleDay(noosData,salesData));</span>
+<span class="nc" id="L145">            noosData.setLastSaleDay(getLastSaleDay(noosData,salesData));</span>
+<span class="nc" id="L146">            NoosData noosStyle=noosStyleDataMap.computeIfAbsent(salesData.getStyleCode(), o-&gt; new NoosData());</span>
+<span class="nc" id="L147">            noosStyle.setRevenue(noosStyle.getRevenue()+salesData.getRevenue());</span>
+<span class="nc" id="L148">            noosStyle.setFirstSaleDay(getFirstSaleDay(noosStyle,salesData));</span>
+<span class="nc" id="L149">            noosStyle.setLastSaleDay(getLastSaleDay(noosStyle,salesData));</span>
+<span class="nc" id="L150">        }</span>
+<span class="nc" id="L151">        HashMap&lt;String,NoosPojo&gt; categoryNoos=new HashMap&lt;String,NoosPojo&gt;();</span>
+        // For category ROS
+        // 1. calculate style rev contri
+        // 2. calculate style ros
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for (SalesData salesData : cleanedSales) {</span>
+<span class="nc" id="L156">            NoosPojo noosPojo = categoryNoos.computeIfAbsent(salesData.getCategory(),o-&gt; new NoosPojo());</span>
+<span class="nc" id="L157">            double addition = salesData.getRevenue() * 100 / noosCategoryDataMap.get(salesData.getCategory()).getRevenue();</span>
+<span class="nc" id="L158">            noosPojo.setStyleRevContri(noosPojo.getStyleRevContri() + addition);</span>
+<span class="nc" id="L159">            double additionInRos = salesData.getQuantity() / (DateUtil.differenceInDays(noosCategoryDataMap.get(salesData.getCategory()).getFirstSaleDay(), noosCategoryDataMap.get(salesData.getCategory()).getLastSaleDay())+1);</span>
+<span class="nc" id="L160">            noosPojo.setStyleRos(noosPojo.getStyleRos() + additionInRos);</span>
+<span class="nc" id="L161">            noosPojo.setCategory(salesData.getCategory());</span>
+<span class="nc" id="L162">            noosPojo.setStyleCode(salesData.getStyleCode());</span>
+<span class="nc" id="L163">        }</span>
+
+<span class="nc" id="L165">        HashMap&lt; String, NoosPojo&gt; finalNoos = new HashMap&lt; String, NoosPojo&gt;();</span>
+        // 1. calculate style rev contri
+        // 2. calculate style ros
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        for (SalesData salesData : cleanedSales) {</span>
+<span class="nc" id="L169">            NoosPojo noosPojo = finalNoos.computeIfAbsent(salesData.getStyleCode(),o-&gt; new NoosPojo());</span>
+<span class="nc" id="L170">            double addition = salesData.getRevenue() * 100 / noosCategoryDataMap.get(salesData.getCategory()).getRevenue();</span>
+<span class="nc" id="L171">            noosPojo.setStyleRevContri(noosPojo.getStyleRevContri() + addition);</span>
+<span class="nc" id="L172">            double additionInRos = salesData.getQuantity() / (DateUtil.differenceInDays(noosStyleDataMap.get(salesData.getStyleCode()).getFirstSaleDay(), noosStyleDataMap.get(salesData.getStyleCode()).getLastSaleDay())+1);</span>
+<span class="nc" id="L173">            noosPojo.setStyleRos(noosPojo.getStyleRos() + additionInRos);</span>
+<span class="nc" id="L174">            noosPojo.setCategory(salesData.getCategory());</span>
+<span class="nc" id="L175">            noosPojo.setStyleCode(salesData.getStyleCode());</span>
+<span class="nc" id="L176">        }</span>
+
+<span class="nc" id="L178">        FileWriter fos = new FileWriter(&quot;files/algo-files/NOOS_Report.txt&quot;, false);</span>
+<span class="nc" id="L179">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L180">        reportService.deleteNoos();</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        for (Map.Entry mapElement : finalNoos.entrySet()) {</span>
+<span class="nc" id="L182">            NoosPojo helper = (NoosPojo) mapElement.getValue();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if(helper.getStyleRos() &gt;= categoryNoos.get(helper.getCategory()).getStyleRos()){</span>
+<span class="nc" id="L184">                dos.println(helper.getCategory()+&quot;\t&quot;+helper.getStyleCode()+&quot;\t&quot;+helper.getStyleRevContri()+&quot;\t&quot;+helper.getStyleRos());</span>
+<span class="nc" id="L185">                reportService.addNoos(helper);</span>
+            }
+<span class="nc" id="L187">        }</span>
+<span class="nc" id="L188">        fos.close();</span>
+<span class="nc" id="L189">    }</span>
+
+
+
+
+
+
+
+    private LocalDate getFirstSaleDay(NoosData noosData, SalesData salesData) {
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        if (noosData.getFirstSaleDay() == null)</span>
+<span class="nc" id="L199">            return salesData.getDate();</span>
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        return salesData.getDate().isBefore(noosData.getFirstSaleDay()) ? salesData.getDate() : noosData.getFirstSaleDay();</span>
+    }
+    private LocalDate getLastSaleDay(NoosData noosData, SalesData salesData) {
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (noosData.getLastSaleDay() == null)</span>
+<span class="nc" id="L205">            return salesData.getDate();</span>
+
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        return salesData.getDate().isAfter(noosData.getLastSaleDay()) ? salesData.getDate() : noosData.getLastSaleDay();</span>
+    }
+
+
+    private List&lt;SalesData&gt; liquidationCleanup(List&lt;SalesData&gt; salesData, double multiplier) throws IOException {
+<span class="nc" id="L212">        List&lt;SalesData&gt; cleanedSales = new ArrayList&lt;SalesData&gt;();</span>
+<span class="nc" id="L213">        HashMap&lt;Pair&lt;String, String&gt;, LiquidationData&gt; liquidationMap = new HashMap&lt;Pair&lt;String, String&gt;, LiquidationData&gt;();</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        for (SalesData sale : salesData) {</span>
+<span class="nc" id="L216">            Pair&lt;String, String&gt; catSubCatKey = new Pair&lt;String, String&gt;(sale.getCategory(), sale.getSubCategory());</span>
+<span class="nc" id="L217">            LiquidationData data = liquidationMap.computeIfAbsent(catSubCatKey, o -&gt; new LiquidationData(sale.getCategory(), sale.getSubCategory()));</span>
+
+<span class="nc" id="L219">            data.setAvgDiscount(((sale.getQuantity() * sale.getDiscount()) + (data.getAvgDiscount() * data.getQuantity())) / (sale.getQuantity() + data.getQuantity()));</span>
+<span class="nc" id="L220">            data.setRevenue(data.getRevenue() + sale.getRevenue());</span>
+<span class="nc" id="L221">            data.setQuantity(data.getQuantity() + sale.getQuantity());</span>
+<span class="nc" id="L222">        }</span>
+
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        for (SalesData sale : salesData) {</span>
+<span class="nc" id="L225">            Pair&lt;String, String&gt; catSubCat = new Pair&lt;String, String&gt;(sale.getCategory(), sale.getSubCategory());</span>
+<span class="nc" id="L226">            LiquidationData catSubCatData = liquidationMap.get(catSubCat);</span>
+
+<span class="nc bnc" id="L228" title="All 2 branches missed.">            if (sale.getDiscount() &lt;= catSubCatData.getAvgDiscount() * multiplier ) {</span>
+<span class="nc" id="L229">                cleanedSales.add(sale);</span>
+<span class="nc" id="L230">                catSubCatData.setQuantity(catSubCatData.getQuantity() + sale.getQuantity());</span>
+            } else {
+<span class="nc" id="L232">                catSubCatData.setAvgCleanedDiscount(((sale.getDiscount() * sale.getQuantity()) + (catSubCatData.getCleanedQuantity() * catSubCatData.getAvgCleanedDiscount())) / (sale.getQuantity() + catSubCatData.getCleanedQuantity()));</span>
+<span class="nc" id="L233">                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());</span>
+<span class="nc" id="L234">                catSubCatData.setCleanedRevenue(sale.getRevenue() + catSubCatData.getCleanedRevenue());</span>
+            }
+<span class="nc" id="L236">            liquidationMap.put(catSubCat, catSubCatData);</span>
+<span class="nc" id="L237">        }</span>
+
+<span class="nc" id="L239">        FileWriter fos = new FileWriter(&quot;files/algo-files/Liquidation_Cleanup_Report.txt&quot;, false);</span>
+<span class="nc" id="L240">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L241">        reportService.deleteLiquidation();;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        for (Map.Entry mapElement : liquidationMap.entrySet()) {</span>
+<span class="nc" id="L243">            LiquidationData helper = (LiquidationData) mapElement.getValue();</span>
+<span class="nc" id="L244">            dos.println(helper.getCategory() + '\t' + helper.getSubCategory() + '\t' + helper.getCleanedRevenue() + &quot;\t&quot; + helper.getAvgCleanedDiscount());</span>
+<span class="nc" id="L245">            reportService.addLiquidation(convertDataToPojo(helper));</span>
+<span class="nc" id="L246">        }</span>
+<span class="nc" id="L247">        fos.close();</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">        for (SalesData it : cleanedSales) {</span>
+<span class="nc" id="L249">            System.out.println(it.getRevenue());</span>
+<span class="nc" id="L250">        }</span>
+//        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource.getDataSource());
+//        String dataFilepath = &quot;C:\\projects\\Iris\\files\\algo-files\\Liquidation-Cleanup-Report.txt&quot;;
+//        String tableName = &quot;liquidationpojo&quot;;
+//        String sql = &quot;LOAD DATA LOCAL INFILE '&quot; + dataFilepath + &quot;' into table &quot; + tableName;
+//
+//        jdbcTemplate.execute(sql);
+
+<span class="nc" id="L258">        return cleanedSales;</span>
+    }
+
+    private LiquidationPojo convertDataToPojo(LiquidationData data) {
+<span class="nc" id="L262">        LiquidationPojo converted = new LiquidationPojo();</span>
+<span class="nc" id="L263">        converted.setCategory(data.getCategory());</span>
+<span class="nc" id="L264">        converted.setSubcategory(data.getSubCategory());</span>
+<span class="nc" id="L265">        converted.setAvgDiscount(data.getAvgDiscount());</span>
+<span class="nc" id="L266">        converted.setAvgCleanedDiscount(data.getAvgCleanedDiscount());</span>
+<span class="nc" id="L267">        converted.setRevenueCleanup(data.getCleanedRevenue());</span>
+<span class="nc" id="L268">        return converted;</span>
+    }
+
+
+    private List&lt;SalesData&gt; convertIntoSalesData(List&lt;SalesPojo&gt; list) {
+<span class="nc" id="L273">     List&lt;SalesData&gt; converted=new ArrayList&lt;SalesData&gt;();</span>
+<span class="nc" id="L274">     HashMap&lt;Integer,SkuPojo&gt; skuMap=skuService.selectAllMap();</span>
+<span class="nc" id="L275">     HashMap&lt;Integer, StylePojo&gt; styleMap=styleService.selectAllMap();</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">     for(SalesPojo p: list){</span>
+<span class="nc" id="L277">         SkuPojo skuPojo=skuMap.get(p.getSkuId());</span>
+<span class="nc" id="L278">         SalesData data=new SalesData();</span>
+<span class="nc" id="L279">         data.setQuantity(p.getQuantity());</span>
+<span class="nc" id="L280">         data.setDate(p.getDate());</span>
+<span class="nc" id="L281">         data.setDiscount(p.getDiscount() * 100 / (p.getRevenue() + p.getDiscount()));</span>
+<span class="nc" id="L282">         data.setSize(skuPojo.getSize());</span>
+<span class="nc" id="L283">         data.setRevenue(p.getRevenue());</span>
+<span class="nc" id="L284">         data.setCategory(styleMap.get(skuPojo.getStyleId()).getCategory());</span>
+<span class="nc" id="L285">         data.setSubCategory(styleMap.get(skuPojo.getStyleId()).getSubCategory());</span>
+<span class="nc" id="L286">         data.setStyleCode(styleMap.get(skuPojo.getStyleId()).getStyleCode());</span>
+<span class="nc" id="L287">         converted.add(data);</span>
+
+<span class="nc" id="L289">     }</span>
+<span class="nc" id="L290">         return converted;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

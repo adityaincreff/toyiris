@@ -1,16 +1,13 @@
 package com.increff.toyiris.controller;
-
 import com.increff.toyiris.dto.AlgoDto;
 import com.increff.toyiris.model.InputForm;
 import com.increff.toyiris.pojo.AlgoInputPojo;
 import com.increff.toyiris.service.ApiException;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -39,7 +36,8 @@ public class AlgoRunController {
 
     @ApiOperation(value = "Runs the Algorithm")
     @RequestMapping(method = RequestMethod.GET)
-    public void runAlgo() throws ApiException, IOException {
+
+    public void runAlgo() throws ApiException, IOException{
         algoDto.algoRun();
     }
 }

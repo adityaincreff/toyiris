@@ -9,3 +9,18 @@ style7	br7	jacket	leather	2200.0	m
 style8	br8	jeans	skinny	1800.0	m
 style9	br9	jeans	straight	999.0	f
 style10	br10	pant	trousers	1299.0	m
+style11	br11	pant	bellbottom	2000.0	m
+style12	br12	jacket	leather	5000.0	f
+style13	br13	jacket	denim	4500.0	m
+style14	br14	shirt	denim	800.0	f
+style15	br15	shirt	polo	899.0	m
+style16	br16	tshirt	check	1200.0	f
+style17	br17	tshirt	collared	1300.0	m
+style18	br18	socks	anklelength	300.0	f
+style19	br19	socks	fulllength	250.0	m
+style20	br20	pant	trousers	1600.0	f
+style21	br21	socks	ankle length	420.0	m
+style22	br22	jeans	straight	2300.0	f
+style23	br23	jeans	baggy	2700.0	m
+style24	br24	jeans	baggy	3100.0	f
+style25	br25	jeans	baggy	3300.0	m

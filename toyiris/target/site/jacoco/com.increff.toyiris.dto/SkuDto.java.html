@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SkuDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToyIris</a> &gt; <a href="index.source.html" class="el_package">com.increff.toyiris.dto</a> &gt; <span class="el_source">SkuDto.java</span></div><h1>SkuDto.java</h1><pre class="source lang-java linenums">package com.increff.toyiris.dto;
+
+import com.increff.toyiris.pojo.SkuPojo;
+import com.increff.toyiris.service.ApiException;
+import com.increff.toyiris.service.SkuService;
+import com.increff.toyiris.service.StyleService;
+import com.increff.toyiris.util.FileUtil;
+import com.increff.toyiris.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+@Service
+
+<span class="fc" id="L22">public class SkuDto {</span>
+    @Autowired
+    private SkuService skuService;
+    @Autowired
+    private StyleService styleService;
+
+    public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
+<span class="nc" id="L29">        System.out.println(&quot;s4&quot;);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if(file==null){</span>
+<span class="nc" id="L31">            throw new ApiException(&quot;Upload a file first&quot;);</span>
+        }
+<span class="nc" id="L33">        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));</span>
+<span class="nc" id="L34">        String dataRow = TSVFile.readLine(); //Read First Line</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (checkFileHeading(dataRow) == false) {</span>
+<span class="nc" id="L36">            throw new ApiException(&quot;File Orientation is not correct&quot;);</span>
+
+        }
+
+<span class="nc" id="L40">        boolean errors = scanFileForErrors(file);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (errors) {</span>
+<span class="nc" id="L42">            throw new ApiException(&quot;File contains some errors&quot;);</span>
+        }
+<span class="nc" id="L44">        dataRow = TSVFile.readLine();</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        while (dataRow != null) {</span>
+<span class="nc" id="L46">            skuService.add(convertRowsToPojo(dataRow));</span>
+<span class="nc" id="L47">            dataRow = TSVFile.readLine(); //Read next line</span>
+        }
+<span class="nc" id="L49">    }</span>
+
+    private boolean scanFileForErrors(MultipartFile file) throws IOException, ApiException {
+<span class="nc" id="L52">        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), &quot;UTF-8&quot;));</span>
+<span class="nc" id="L53">        boolean ans = false;</span>
+<span class="nc" id="L54">        String dataRow = TSVFile.readLine();</span>
+<span class="nc" id="L55">        int rowNumber = 0;</span>
+<span class="nc" id="L56">        refreshFile();</span>
+<span class="nc" id="L57">        dataRow = TSVFile.readLine();</span>
+<span class="nc" id="L58">        FileWriter fos = new FileWriter(&quot;files/error-files/sku-error.txt&quot;, true);</span>
+<span class="nc" id="L59">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        while (dataRow != null) {</span>
+            try {
+<span class="nc" id="L62">                SkuPojo dataConverted = convertRowsToPojo(dataRow);</span>
+<span class="nc" id="L63">                dataConverted = normalize(dataConverted);</span>
+<span class="nc" id="L64">                check(dataConverted);</span>
+<span class="nc" id="L65">                skuService.exists(dataConverted);</span>
+<span class="nc" id="L66">            } catch (ApiException e) {</span>
+<span class="nc" id="L67">                dos.println(rowNumber + &quot;\t&quot; + dataRow + &quot;\t&quot; + e.getMessage());</span>
+<span class="nc" id="L68">                ans = true;</span>
+<span class="nc" id="L69">            }</span>
+<span class="nc" id="L70">            rowNumber++;</span>
+<span class="nc" id="L71">            dataRow = TSVFile.readLine();</span>
+        }
+<span class="nc" id="L73">        fos.close();</span>
+<span class="nc" id="L74">        return ans;</span>
+
+
+    }
+
+    private void check(SkuPojo dataConverted) throws ApiException {
+<span class="nc bnc" id="L80" title="All 4 branches missed.">        if (StringUtil.isEmpty(dataConverted.getSize()) || StringUtil.isEmpty(dataConverted.getSkuCode())) {</span>
+<span class="nc" id="L81">            throw new ApiException(&quot;One or more fields are empty&quot;);</span>
+        }
+
+<span class="nc" id="L84">    }</span>
+
+    public SkuPojo normalize(SkuPojo dataConverted) {
+<span class="fc" id="L87">        dataConverted.setSize(StringUtil.toLowerCaseTrim(dataConverted.getSize()));</span>
+<span class="fc" id="L88">        dataConverted.setSkuCode(StringUtil.toLowerCaseTrim(dataConverted.getSkuCode()));</span>
+<span class="fc" id="L89">        return dataConverted;</span>
+    }
+
+    private SkuPojo convertRowsToPojo(String dataRow) throws ApiException {
+<span class="nc" id="L93">        StringTokenizer st = new StringTokenizer(dataRow);</span>
+<span class="nc" id="L94">        SkuPojo skuPojo = new SkuPojo();</span>
+<span class="nc" id="L95">        List&lt;String&gt; dataArray = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        while (st.hasMoreElements()) {</span>
+<span class="nc" id="L97">            dataArray.add(st.nextElement().toString());</span>
+        }
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if(dataArray.size()&lt;3){</span>
+<span class="nc" id="L100">            throw new ApiException(&quot;One or more fields empty&quot;);</span>
+        }
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        else if(dataArray.size()&gt;3){</span>
+<span class="nc" id="L103">            throw new ApiException(&quot;Extra values added.&quot;);</span>
+        }else {
+<span class="nc" id="L105">            skuPojo.setSkuCode(dataArray.get(0));</span>
+
+<span class="nc" id="L107">            skuPojo.setStyleId(styleService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));</span>
+<span class="nc" id="L108">            skuPojo.setSize(dataArray.get(2));</span>
+<span class="nc" id="L109">            return skuPojo;</span>
+        }
+    }
+
+    private void refreshFile() throws IOException {
+<span class="nc" id="L114">        FileWriter fos = new FileWriter(&quot;files/error-files/sku-error.txt&quot;, false);</span>
+<span class="nc" id="L115">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L116">        dos.println(&quot;Row Number\tSKU\tStyle Code\tSize\tError Message&quot;);</span>
+<span class="nc" id="L117">        fos.close();</span>
+
+
+<span class="nc" id="L120">    }</span>
+
+    private boolean checkFileHeading(String dataRow) {
+<span class="nc" id="L123">        StringTokenizer st = new StringTokenizer(dataRow, &quot;\t&quot;);</span>
+<span class="nc" id="L124">        List&lt;String&gt; dataArray = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        while (st.hasMoreElements()) {</span>
+<span class="nc" id="L126">            dataArray.add(st.nextElement().toString());</span>
+        }
+
+<span class="nc bnc" id="L129" title="All 6 branches missed.">        if (!dataArray.get(1).equals(&quot;Style Code&quot;) || !dataArray.get(0).equals(&quot;SKU&quot;) || !dataArray.get(2).equals(&quot;Size&quot;)) {</span>
+<span class="nc" id="L130">            return false;</span>
+        }
+<span class="nc" id="L132">        return true;</span>
+
+    }
+
+    public void selectALL(HttpServletResponse response) throws IOException {
+<span class="nc" id="L137">        List&lt;SkuPojo&gt; skuPojo = skuService.selectAll();</span>
+<span class="nc" id="L138">        FileWriter fos = new FileWriter(&quot;files/downloads/sku.txt&quot;, false);</span>
+<span class="nc" id="L139">        PrintWriter dos = new PrintWriter(fos);</span>
+<span class="nc" id="L140">        dos.println(&quot;SKU\tStyle Code\tSize&quot;);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        for (SkuPojo s : skuPojo) {</span>
+<span class="nc" id="L142">            dos.print(s.getSkuCode() + '\t' + styleService.selectbyId(s.getStyleId()) + '\t' + s.getSize());</span>
+<span class="nc" id="L143">            dos.println();</span>
+<span class="nc" id="L144">        }</span>
+<span class="nc" id="L145">        fos.close();</span>
+<span class="nc" id="L146">        FileUtil.downloadFile(&quot;downloads/sku&quot;, response);</span>
+
+
+<span class="nc" id="L149">    }</span>
+
+    public void downloadErrors(HttpServletResponse response) throws ApiException, IOException {
+<span class="nc" id="L152">        File file = new File(&quot;C:\\Users\\user\\IdeaProjects\\toyiris\\files\\error-files\\sales-error.txt&quot;);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (file.exists() == false) {</span>
+<span class="nc" id="L154">            throw new ApiException(&quot;Upload a file first&quot;);</span>
+        }
+
+<span class="nc" id="L157">        FileUtil.downloadFile(&quot;error-files/sku-error&quot;, response);</span>
+<span class="nc" id="L158">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

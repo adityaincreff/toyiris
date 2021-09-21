@@ -21,6 +21,8 @@ public class StoreDto {
     @Autowired
     private StoreService storeService;
 
+
+
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
 
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
@@ -98,7 +100,7 @@ public class StoreDto {
         }
     }
 
-    private StorePojo normalize(StorePojo dataConverted) {
+    public StorePojo normalize(StorePojo dataConverted) {
         dataConverted.setCity(StringUtil.toLowerCaseTrim(dataConverted.getCity()));
         dataConverted.setBranch(StringUtil.toLowerCaseTrim(dataConverted.getBranch()));
         return dataConverted;

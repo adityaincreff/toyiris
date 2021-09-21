@@ -1,7 +1,8 @@
-jeans	skinny	0.0	0.0
-tshirt	collared	0.0	0.0
-shirt	collared	4000.5	20.00599880023995
-tshirt	check	0.0	0.0
-jacket	leather	0.0	0.0
-pant	bellbottom	0.0	0.0
-pant	cargo	0.0	0.0
+socks	ankle length	3558.0	17.677001388246183
+tshirt	collared	5202.0	16.929925996856912
+shirt	collared	4219.0	19.155667869303336
+jacket	denim	8547.0	6.221198156682028
+pant	bellbottom	9212.0	8.692635543661414
+jacket	leather	5496.0	22.120722519224888
+jeans	baggy	3558.0	17.677001388246183
+socks	fulllength	3432.0	18.034878781002792
