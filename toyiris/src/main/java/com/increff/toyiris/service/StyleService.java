@@ -5,6 +5,7 @@ import com.increff.toyiris.pojo.StylePojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,10 +35,22 @@ public class StyleService {
         if(stylePojo!=null){
             throw new ApiException("Product with same Style Code already exists");
         }
-    }
 
+    }
+    @Transactional
     public void add(StylePojo stylePojo) {
-        styleDao.add(stylePojo);
+        StylePojo stylePojo1=styleDao.select(stylePojo.getStyleCode());
+        if(stylePojo1!=null){
+            stylePojo1.setBrand(stylePojo.getBrand());
+            stylePojo1.setSubCategory(stylePojo.getSubCategory());
+            stylePojo1.setCategory(stylePojo.getCategory());
+            stylePojo1.setMrp(stylePojo.getMrp());
+            stylePojo1.setGender(stylePojo.getGender());
+            styleDao.update(stylePojo1);
+        }
+        else {
+            styleDao.add(stylePojo);
+        }
     }
 
     public List<StylePojo> selectAll() {

@@ -72,8 +72,8 @@ public class AlgoDto {
         List<SalesPojo> list = salesService.selectAll();
         List<SalesData> salesData = convertIntoSalesData(list);
         List<SalesData> cleanedSales=liquidationCleanup(salesData,input.getLiquidationMultiplier());
-        goodSizes(cleanedSales,input.getGoodSize(),input.getBadSize());
         noosReport(cleanedSales,input.getDate());
+        goodSizes(cleanedSales,input.getGoodSize(),input.getBadSize());
     }
 
     private void goodSizes(List<SalesData> cleanedSales, double goodSize, double badSize) throws IOException {
@@ -131,7 +131,7 @@ public class AlgoDto {
 
     private void noosReport(List<SalesData> cleanedSales, LocalDate input) throws IOException {
         //key->category
-        HashMap<String, NoosData> noosCategoryDataMap=new HashMap<>();
+        HashMap<String, NoosData> noosCategoryDataMap=new HashMap<String,NoosData>();
         //key->style
         HashMap<String,NoosData> noosStyleDataMap=new HashMap<String,NoosData>();
         cleanedSales = cleanedSales.stream().filter(sale -> sale.getDate().isBefore(input.plusDays(1))).filter(sale -> sale.getDate().isAfter(input.minusMonths(6))).collect(Collectors.toList());
@@ -143,6 +143,7 @@ public class AlgoDto {
             noosData.setRevenue(noosData.getRevenue()+ salesData.getRevenue());
             noosData.setFirstSaleDay(getFirstSaleDay(noosData,salesData));
             noosData.setLastSaleDay(getLastSaleDay(noosData,salesData));
+
             NoosData noosStyle=noosStyleDataMap.computeIfAbsent(salesData.getStyleCode(), o-> new NoosData());
             noosStyle.setRevenue(noosStyle.getRevenue()+salesData.getRevenue());
             noosStyle.setFirstSaleDay(getFirstSaleDay(noosStyle,salesData));
@@ -154,9 +155,9 @@ public class AlgoDto {
         // 2. calculate style ros
         for (SalesData salesData : cleanedSales) {
             NoosPojo noosPojo = categoryNoos.computeIfAbsent(salesData.getCategory(),o-> new NoosPojo());
-            double addition = salesData.getRevenue() * 100 / noosCategoryDataMap.get(salesData.getCategory()).getRevenue();
+            double addition =salesData.getRevenue() * 100 / noosCategoryDataMap.get(salesData.getCategory()).getRevenue();
             noosPojo.setStyleRevContri(noosPojo.getStyleRevContri() + addition);
-            double additionInRos = salesData.getQuantity() / (DateUtil.differenceInDays(noosCategoryDataMap.get(salesData.getCategory()).getFirstSaleDay(), noosCategoryDataMap.get(salesData.getCategory()).getLastSaleDay())+1);
+            double additionInRos = (double)salesData.getQuantity() / (DateUtil.differenceInDays(noosCategoryDataMap.get(salesData.getCategory()).getFirstSaleDay(), noosCategoryDataMap.get(salesData.getCategory()).getLastSaleDay())+1);
             noosPojo.setStyleRos(noosPojo.getStyleRos() + additionInRos);
             noosPojo.setCategory(salesData.getCategory());
             noosPojo.setStyleCode(salesData.getStyleCode());
@@ -167,9 +168,9 @@ public class AlgoDto {
         // 2. calculate style ros
         for (SalesData salesData : cleanedSales) {
             NoosPojo noosPojo = finalNoos.computeIfAbsent(salesData.getStyleCode(),o-> new NoosPojo());
-            double addition = salesData.getRevenue() * 100 / noosCategoryDataMap.get(salesData.getCategory()).getRevenue();
+            double addition = salesData.getRevenue() * 100 / (double)noosCategoryDataMap.get(salesData.getCategory()).getRevenue();
             noosPojo.setStyleRevContri(noosPojo.getStyleRevContri() + addition);
-            double additionInRos = salesData.getQuantity() / (DateUtil.differenceInDays(noosStyleDataMap.get(salesData.getStyleCode()).getFirstSaleDay(), noosStyleDataMap.get(salesData.getStyleCode()).getLastSaleDay())+1);
+            double additionInRos = (double)salesData.getQuantity() / (DateUtil.differenceInDays(noosStyleDataMap.get(salesData.getStyleCode()).getFirstSaleDay(), noosStyleDataMap.get(salesData.getStyleCode()).getLastSaleDay())+1);
             noosPojo.setStyleRos(noosPojo.getStyleRos() + additionInRos);
             noosPojo.setCategory(salesData.getCategory());
             noosPojo.setStyleCode(salesData.getStyleCode());
@@ -227,10 +228,10 @@ public class AlgoDto {
 
             if (sale.getDiscount() <= catSubCatData.getAvgDiscount() * multiplier ) {
                 cleanedSales.add(sale);
-                catSubCatData.setQuantity(catSubCatData.getQuantity() + sale.getQuantity());
+                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
             } else {
                 catSubCatData.setAvgCleanedDiscount(((sale.getDiscount() * sale.getQuantity()) + (catSubCatData.getCleanedQuantity() * catSubCatData.getAvgCleanedDiscount())) / (sale.getQuantity() + catSubCatData.getCleanedQuantity()));
-                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
+               // catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
                 catSubCatData.setCleanedRevenue(sale.getRevenue() + catSubCatData.getCleanedRevenue());
             }
             liquidationMap.put(catSubCat, catSubCatData);
@@ -248,12 +249,7 @@ public class AlgoDto {
         for (SalesData it : cleanedSales) {
             System.out.println(it.getRevenue());
         }
-//        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource.getDataSource());
-//        String dataFilepath = "C:\\projects\\Iris\\files\\algo-files\\Liquidation-Cleanup-Report.txt";
-//        String tableName = "liquidationpojo";
-//        String sql = "LOAD DATA LOCAL INFILE '" + dataFilepath + "' into table " + tableName;
-//
-//        jdbcTemplate.execute(sql);
+
 
         return cleanedSales;
     }

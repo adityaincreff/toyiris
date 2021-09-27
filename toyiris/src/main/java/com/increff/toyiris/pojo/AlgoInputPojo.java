@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name="algoInput")
 public class AlgoInputPojo {
     @Id
     @Column(name = "id")

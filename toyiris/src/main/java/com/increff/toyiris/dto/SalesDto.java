@@ -1,6 +1,8 @@
 package com.increff.toyiris.dto;
 
 import com.increff.toyiris.pojo.SalesPojo;
+import com.increff.toyiris.pojo.SkuPojo;
+import com.increff.toyiris.pojo.StorePojo;
 import com.increff.toyiris.service.*;
 import com.increff.toyiris.util.DatatypeConversion;
 import com.increff.toyiris.util.FileUtil;
@@ -40,10 +42,32 @@ public class SalesDto {
             throw new ApiException("File contains some errors");
         }
         dataRow = TSVFile.readLine();
+        //for(StorePojo t:storeService.selectAll())
+        //{
+           // for(SkuPojo s:skuService.selectAll()){
+                //for(LocalDate date=LocalDate.now();date.isAfter(LocalDate.now().minusDays(60));date=date.minusDays(1)){
+                 //   SalesPojo salesPojo=new SalesPojo();
+                //  salesPojo.setDate(date);
+                //    salesPojo.setRevenue(1000+Math.random()*4000);
+                //    salesPojo.setDiscount(Math.random()*100);
+                 //   salesPojo.setQuantity((int) (1+Math.random()*15));
+                  //  salesPojo.setStoreId(t.getId());
+                   // salesPojo.setSkuId(s.getId());
+                    //salesService.add(salesPojo);
+
+              //}
+
+
+            //}
+        //}
+        salesService.delete(true);
         while (dataRow != null) {
-            salesService.add(convertRowsToPojo(dataRow));
-            dataRow = TSVFile.readLine();
-        }
+
+
+                salesService.add(convertRowsToPojo(dataRow));
+                dataRow = TSVFile.readLine();
+            }
+
     }
 
     private SalesPojo convertRowsToPojo(String dataRow) throws ApiException {
@@ -73,7 +97,7 @@ public class SalesDto {
     }
 
     private LocalDate convertStringToDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(date, formatter);
     }
 
@@ -90,7 +114,7 @@ public class SalesDto {
             try {
                 SalesPojo dataConverted = convertRowsToPojo(dataRow);
                 check(dataConverted);
-                salesService.exists(dataConverted);
+                //salesService.exists(dataConverted);
 
             } catch (ApiException e) {
                 dos.println(rowNumber + "\t" + dataRow + "\t" + e.getMessage());

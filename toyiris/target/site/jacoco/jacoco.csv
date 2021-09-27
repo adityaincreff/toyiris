@@ -9,7 +9,7 @@ ToyIris,com.increff.toyiris.dto,SalesDto,441,3,40,0,82,1,29,1,9,1
 ToyIris,com.increff.toyiris.dto,ReportDto,12,3,0,0,3,1,3,1,3,1
 ToyIris,com.increff.toyiris.dto,StoreDto,335,15,28,0,78,4,22,2,8,2
 ToyIris,com.increff.toyiris.dto,StyleDto,387,3,32,0,78,1,23,1,7,1
-ToyIris,com.increff.toyiris.dto,AlgoDto,1057,3,54,0,168,1,48,1,21,1
+ToyIris,com.increff.toyiris.dto,AlgoDto,1059,3,54,0,168,1,48,1,21,1
 ToyIris,com.increff.toyiris.controller,ReportController,12,3,0,0,3,1,3,1,3,1
 ToyIris,com.increff.toyiris.controller,StyleController,15,3,0,0,6,1,3,1,3,1
 ToyIris,com.increff.toyiris.controller,AlgoRunController,29,3,0,0,9,1,3,1,3,1

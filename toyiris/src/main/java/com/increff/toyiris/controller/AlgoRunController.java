@@ -21,10 +21,6 @@ public class AlgoRunController {
     @ApiOperation(value = "Adds the parameters")
     @RequestMapping(path = "/input", method = RequestMethod.POST)
     public void addParameters(@RequestBody InputForm inputForm) throws ApiException {
-        System.out.println(inputForm.getLiquidationMultiplier());
-        System.out.println(inputForm.getDate());
-        System.out.println(inputForm.getBadSize());
-        System.out.println(inputForm.getGoodSize());
         algoDto.addParameters(inputForm);
     }
 
@@ -36,7 +32,6 @@ public class AlgoRunController {
 
     @ApiOperation(value = "Runs the Algorithm")
     @RequestMapping(method = RequestMethod.GET)
-
     public void runAlgo() throws ApiException, IOException{
         algoDto.algoRun();
     }

@@ -7,10 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +30,8 @@ public class SkuController {
     public void selectALL(HttpServletResponse response)throws IOException{
         skuDto.selectALL(response);
     }
+
+
     @ApiOperation(value="Download errors")
     @RequestMapping(path="/errors",method = RequestMethod.GET)
     public void downloadErrors(HttpServletResponse response)throws ApiException,IOException{

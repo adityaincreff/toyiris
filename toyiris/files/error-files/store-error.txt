@@ -1,5 +1,1 @@
 Row Number	Branch	City	Error Message
-1	b1	c1	Store already exists
-2	b2	c2	Store already exists
-3		c3	One or more fields empty
-4	b4		One or more fields empty

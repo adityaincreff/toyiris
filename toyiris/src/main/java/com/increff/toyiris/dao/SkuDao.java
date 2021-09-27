@@ -32,4 +32,8 @@ public class SkuDao extends AbstractDao {
         query.setParameter("id", id);
         return getSingle(query);
     }
+    @Transactional
+    public void update(SkuPojo skuPojo1) {
+    em().merge(skuPojo1);
+    }
 }

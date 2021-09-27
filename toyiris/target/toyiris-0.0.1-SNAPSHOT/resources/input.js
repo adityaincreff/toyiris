@@ -47,9 +47,19 @@ function addInputParameters(){
 
 function runModule(){
     url = getAlgoUrl();
+
+
     let successFx = function(){
         successMessageDisplay("Algo Run Successful.");
     }
+    nativeToast({
+                          message: "Algo is running." ,
+                          position: 'north',
+                          timeout: 0,
+                          type: 'success',
+                          closeOnClick: true
+                    });
+
     ajaxRequest(url,'GET',1,successFx);
 }
 function init(){

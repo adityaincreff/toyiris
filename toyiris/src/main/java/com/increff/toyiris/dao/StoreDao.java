@@ -32,4 +32,8 @@ public class StoreDao extends AbstractDao{
         query.setParameter("id", id);
         return getSingle(query);
     }
+    @Transactional
+    public void update(StorePojo storePojo1) {
+        em().merge(storePojo1);
+    }
 }

@@ -54,7 +54,9 @@ public class StyleDto {
         PrintWriter dos = new PrintWriter(fos);
         while (dataRow != null) {
             try {
-                styleService.exists(convertRowsToPojo(dataRow));
+                StylePojo dataConverted=convertRowsToPojo(dataRow);
+                check(dataConverted);
+                //styleService.exists(convertRowsToPojo(dataRow));
             } catch (ApiException e) {
                 String x = dataRow + '\t' + e.getMessage();
                 dos.println(rowNumber + "\t" + x);
@@ -68,6 +70,12 @@ public class StyleDto {
         fos.close();
         return ans;
 
+    }
+
+    private void check(StylePojo dataConverted) throws ApiException {
+        if(StringUtil.isEmpty(dataConverted.getStyleCode())||StringUtil.isEmpty(dataConverted.getBrand())||StringUtil.isEmpty(dataConverted.getCategory())||StringUtil.isEmpty(dataConverted.getSubCategory())||StringUtil.isEmpty(String.valueOf(dataConverted.getMrp()))||StringUtil.isEmpty(dataConverted.getGender())){
+            throw new ApiException("One or more fields are empty");
+        }
     }
 
     private void refreshFile() throws IOException {

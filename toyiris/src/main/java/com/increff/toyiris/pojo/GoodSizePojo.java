@@ -4,7 +4,7 @@ package com.increff.toyiris.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name="output_goodSize")
+@Table(name="outputGoodSize")
 public class GoodSizePojo {
     @Id
     @Column(name = "id")

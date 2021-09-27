@@ -26,7 +26,6 @@ public class SkuDto {
     private StyleService styleService;
 
     public void add(@RequestPart MultipartFile file) throws IOException, ApiException {
-        System.out.println("s4");
         if(file==null){
             throw new ApiException("Upload a file first");
         }
@@ -62,7 +61,7 @@ public class SkuDto {
                 SkuPojo dataConverted = convertRowsToPojo(dataRow);
                 dataConverted = normalize(dataConverted);
                 check(dataConverted);
-                skuService.exists(dataConverted);
+                //skuService.exists(dataConverted);
             } catch (ApiException e) {
                 dos.println(rowNumber + "\t" + dataRow + "\t" + e.getMessage());
                 ans = true;
@@ -103,7 +102,6 @@ public class SkuDto {
             throw new ApiException("Extra values added.");
         }else {
             skuPojo.setSkuCode(dataArray.get(0));
-
             skuPojo.setStyleId(styleService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
             skuPojo.setSize(dataArray.get(2));
             return skuPojo;
@@ -156,4 +154,5 @@ public class SkuDto {
 
         FileUtil.downloadFile("error-files/sku-error", response);
     }
+
 }

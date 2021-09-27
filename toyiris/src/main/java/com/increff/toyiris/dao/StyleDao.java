@@ -33,4 +33,8 @@ public class StyleDao extends AbstractDao {
         TypedQuery<StylePojo> query = getQuery(SELECT_ALL, StylePojo.class);
         return query.getResultList();
     }
+    @Transactional
+    public void update(StylePojo stylePojo1) {
+        em().merge(stylePojo1);
+    }
 }

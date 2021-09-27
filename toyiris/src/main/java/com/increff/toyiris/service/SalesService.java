@@ -11,18 +11,27 @@ import java.util.List;
 public class SalesService {
     @Autowired
     private SalesDao salesDao;
+
+@Transactional
     public void add(SalesPojo salesPojo) {
+
         salesDao.add(salesPojo);
+
+
     }
 
     public List<SalesPojo> selectAll() {
         return salesDao.selectAll();
     }
-    @Transactional
-    public void exists(SalesPojo dataConverted) throws ApiException {
-        SalesPojo salesPojo=salesDao.selectByDateSkuStore(dataConverted.getDate(),dataConverted.getSkuId(),dataConverted.getStoreId());
-        if(salesPojo!=null){
-            throw new ApiException("Sales for this date already exists");
-        }
+
+    public void delete(boolean truncate) {
+        salesDao.deleteAll();
     }
+    // @Transactional
+    //public void exists(SalesPojo dataConverted) throws ApiException {
+     //   SalesPojo salesPojo=salesDao.selectByDateSkuStore(dataConverted.getDate(),dataConverted.getSkuId(),dataConverted.getStoreId());
+       // if(salesPojo!=null){
+         //   throw new ApiException("Sales for this date already exists");
+        //}
+    //}
 }

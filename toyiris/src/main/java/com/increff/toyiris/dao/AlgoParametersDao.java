@@ -23,4 +23,6 @@ public class AlgoParametersDao extends AbstractDao{
         TypedQuery<AlgoInputPojo> query=getQuery(SELECT_ALL,AlgoInputPojo.class);
         return query.getResultList();
     }
+
+
 }

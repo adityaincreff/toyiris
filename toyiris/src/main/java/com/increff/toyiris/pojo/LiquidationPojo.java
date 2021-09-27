@@ -2,16 +2,21 @@ package com.increff.toyiris.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name="output_liquidation")
+@Table(name="outputLiquidation")
 public class LiquidationPojo {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name="category")
     private String category;
+    @Column(name="subcategory")
     private String subcategory;
+    @Column(name="avgDiscount")
     private double avgDiscount;
+    @Column(name="avgCleanedDiscount")
     private double avgCleanedDiscount;
+    @Column(name="revenueCleanup")
     private double revenueCleanup;
 
     public int getId() {

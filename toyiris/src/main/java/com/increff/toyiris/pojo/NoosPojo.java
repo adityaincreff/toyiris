@@ -3,15 +3,19 @@ package com.increff.toyiris.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name="output_noos")
+@Table(name="outputNoos")
 public class NoosPojo {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name="category")
     private String category;
+    @Column(name="styleCode")
     private String styleCode;
+    @Column(name="styleRos")
     private double styleRos;
+    @Column(name="styleRevContri")
     private double styleRevContri;
 
     public int getId() {

@@ -1,8 +1,1 @@
 Row Number	Date	SKU	Branch	Quantity	Discount	Revenue	Error Message
-0	14/09/2021	abc	b1	10	100	1000	Sales for this date already exists
-1	14/09/2021	def	b1	15	200	1212	Sales for this date already exists
-2	14/09/2021	abc	b8	25	400	1719	Sales for this date already exists
-3	14/09/2021	def	b3	30	500	2100	Sales for this date already exists
-4	15/09/2021	jkl	b3	35	600	2500	Sales for this date already exists
-5	16/09/2021					4312	One or more fields are empty
-6	17/09/2021	prr	b23	92	241	75653	73	Extra fields are added.

@@ -75,11 +75,10 @@ public class StoreDto {
                 StorePojo dataConverted = convertRowsToPojo(dataRow);
                 dataConverted = normalize(dataConverted);
                 check(dataConverted);
-                storeService.exists(dataConverted);
+               // storeService.exists(dataConverted);
 
             } catch (ApiException e) {
                 String x = dataRow + "\t" + e.getMessage();
-                System.out.println(x);
                 dos.println(rowNumber + "\t" + dataRow + "\t" + e.getMessage());
                 ans = true;
             }

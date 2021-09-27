@@ -5,22 +5,31 @@ import com.increff.toyiris.pojo.SkuPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 @Service
 public class SkuService {
     @Autowired
     private SkuDao skuDao;
-    public void exists(SkuPojo input) throws ApiException{
-        SkuPojo skuPojo=skuDao.select(input.getSkuCode());
-        if(skuPojo!=null)
-        {
-            throw new ApiException("SKU already exists.");
-        }
-    }
-
+    //public void exists(SkuPojo input) throws ApiException{
+      //  SkuPojo skuPojo=skuDao.select(input.getSkuCode());
+        //if(skuPojo!=null)
+        //{
+          //  throw new ApiException("SKU already exists.");
+        //}
+    //}
+    @Transactional
     public void add(SkuPojo skuPojo) {
-        skuDao.add(skuPojo);
+        SkuPojo skuPojo1=skuDao.select(skuPojo.getSkuCode());
+        if(skuPojo1!=null){
+            skuPojo1.setStyleId(skuPojo.getStyleId());
+            skuPojo1.setSize(skuPojo.getSize());
+            skuDao.update(skuPojo1);
+        }
+        else {
+            skuDao.add(skuPojo);
+        }
     }
 
     public List<SkuPojo> selectAll() {

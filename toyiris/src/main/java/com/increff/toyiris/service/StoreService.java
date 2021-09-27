@@ -5,26 +5,34 @@ import com.increff.toyiris.pojo.StorePojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @Service
 public class StoreService {
     @Autowired
     private StoreDao storeDao;
-
+    @Transactional
     public void add(StorePojo storePojo) {
-        storeDao.add(storePojo);
+        StorePojo storePojo1=storeDao.select(storePojo.getBranch());
+        if(storePojo1!=null){
+            storePojo1.setCity(storePojo.getCity());
+            storeDao.update(storePojo1);
+        }
+        else{
+            storeDao.add(storePojo);
+        }
     }
 
     public List<StorePojo> selectAll() {
         return storeDao.selectAll();
     }
 
-    public void exists(StorePojo input) throws ApiException{
-        StorePojo storePojo=storeDao.select(input.getBranch());
-        if(storePojo!=null){
-            throw new ApiException("Store already exists");
-        }
-    }
+    //public void exists(StorePojo input) throws ApiException{
+      //  StorePojo storePojo=storeDao.select(input.getBranch());
+        //if(storePojo!=null){
+        //    throw new ApiException("Store already exists");
+       // }
+    //}
 
     public int select(String s) throws ApiException {
         StorePojo storePojo=storeDao.select(s);

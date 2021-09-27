@@ -12,7 +12,7 @@ import java.util.List;
 public class SalesDao extends AbstractDao {
     private String SELECT_ALL = "Select p from SalesPojo p";
     private String SELECT_BY_ID = "Select p from SalesPojo p where p.date=:date AND p.skuId=:skuId AND p.storeId=:storeId";
-
+    private String DELETE_ALL="Delete from SalesPojo p";
     @Transactional
     public void add(SalesPojo salesPojo) {
         em().persist(salesPojo);
@@ -30,5 +30,9 @@ public class SalesDao extends AbstractDao {
         query.setParameter("date", date).setParameter("skuId", skuId).setParameter("storeId", storeId);
         return getSingle(query);
 
+    }
+    @Transactional
+    public void deleteAll() {
+        em().createQuery(DELETE_ALL).executeUpdate();
     }
 }

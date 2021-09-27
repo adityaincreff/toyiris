@@ -2,19 +2,19 @@ package com.increff.toyiris.model;
 import java.time.LocalDate;
 
 public class InputForm {
-    private int id;
+    //private int id;
     private double liquidationMultiplier;
     private LocalDate date;
     private double goodSize;
     private double badSize;
 
-    public int getId() {
-        return id;
-    }
+    //public int getId() {
+      //  return id;
+    //}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    //public void setId(int id) {
+      //  this.id = id;
+    //}
 
     public double getLiquidationMultiplier() {
         return liquidationMultiplier;
