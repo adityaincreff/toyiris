@@ -1,5 +1,5 @@
 Style Code	Brand	Category	Sub-Category	MRP	Gender
-style1	br1	shirt	collared	1000.0	m
+style1	br5	shirt	collared	1500.0	f
 style2	br2	tshirt	collared	2000.0	m
 style3	br3	pant	cargo	1500.0	f
 style4	br4	shirt	collared	500.0	f
@@ -25,3 +25,6 @@ style23	br23	jeans	baggy	2700.0	m
 style24	br24	jeans	baggy	3100.0	f
 style25	br25	jeans	baggy	3300.0	m
 style26	br26	shirt	check	4200.0	m
+style27	br27	pant	bellbottom	3621.0	m
+style28	br28	jeans	straight	5311.0	f
+style29	br30	shirt	collared	2121.0	m

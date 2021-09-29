@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 @Service
@@ -33,11 +34,11 @@ public class StyleDto {
             throw new ApiException("File contains some errors");
         }
         dataRow = TSVFile.readLine();
-        int rowNumber = 1;
+
         while (dataRow != null) {
             styleService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
-            rowNumber++;
+
 
         }
     }
@@ -47,7 +48,7 @@ public class StyleDto {
                 InputStreamReader(file.getInputStream(), "UTF-8"));
         boolean ans = false;
         String dataRow = TSVFile.readLine();
-        int rowNumber = 1;
+        int rowNumber = 2;
         refreshFile();
         dataRow = TSVFile.readLine();
         FileWriter fos = new FileWriter("files/error-files/style-error.txt", true);
@@ -133,12 +134,16 @@ public class StyleDto {
         else if(dataArray.size()>6){
             throw new ApiException("Extra fields added");
         }
+        else if(!StringUtil.toLowerCaseTrim(dataArray.get(4)).matches(("[+-]?[0-9]+(.[0-9][0-9])?")))
+        {
+            throw new ApiException("MRP is not a decimal number");
+        }else{
         stylePojo.setStyleCode(StringUtil.toLowerCaseTrim(dataArray.get(0)));
         stylePojo.setBrand(StringUtil.toLowerCaseTrim(dataArray.get(1)));
         stylePojo.setCategory(StringUtil.toLowerCaseTrim(dataArray.get(2)));
         stylePojo.setSubCategory(StringUtil.toLowerCaseTrim(dataArray.get(3)));
         stylePojo.setMrp(Double.parseDouble(StringUtil.toLowerCaseTrim(dataArray.get(4))));
         stylePojo.setGender(StringUtil.toLowerCaseTrim(dataArray.get(5)));
-        return stylePojo;
+        return stylePojo;}
     }
 }

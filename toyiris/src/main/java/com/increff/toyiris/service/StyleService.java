@@ -30,13 +30,13 @@ public class StyleService {
         return styleDao.selectById(styleId).getStyleCode();
     }
 
-    public void exists(StylePojo input) throws ApiException {
-        StylePojo stylePojo=styleDao.select(input.getStyleCode());
-        if(stylePojo!=null){
-            throw new ApiException("Product with same Style Code already exists");
-        }
+   // public void exists(StylePojo input) throws ApiException {
+        //StylePojo stylePojo=styleDao.select(input.getStyleCode());
+        //if(stylePojo!=null){
+          //  throw new ApiException("Product with same Style Code already exists");
+      //  }
 
-    }
+    //}
     @Transactional
     public void add(StylePojo stylePojo) {
         StylePojo stylePojo1=styleDao.select(stylePojo.getStyleCode());

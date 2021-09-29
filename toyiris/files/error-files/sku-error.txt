@@ -1,1 +1,6 @@
 Row Number	SKU	Style Code	Size	Error Message
+4	rrr	One or more fields empty
+5	tzz	style7	l	12	Extra values added.
+6				xl	One or more fields empty
+7	prpr	style37	m					No such product exists.
+8					One or more fields empty

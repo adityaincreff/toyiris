@@ -1,1 +1,5 @@
 Row Number	Branch	City	Error Message
+4		c3	One or more fields empty
+5	b4		One or more fields empty
+6	b3	c9	921	l	Extra values added
+8	b3		One or more fields empty

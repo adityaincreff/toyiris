@@ -65,7 +65,7 @@ public class StoreDto {
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
         boolean ans = false;
         String dataRow = TSVFile.readLine();
-        int rowNumber = 1;
+        int rowNumber = 2;
         refreshFile();
         dataRow= TSVFile.readLine();
         FileWriter fos = new FileWriter("files/error-files/store-error.txt", true);
@@ -81,6 +81,7 @@ public class StoreDto {
                 String x = dataRow + "\t" + e.getMessage();
                 dos.println(rowNumber + "\t" + dataRow + "\t" + e.getMessage());
                 ans = true;
+
             }
             rowNumber++;
             dataRow = TSVFile.readLine();

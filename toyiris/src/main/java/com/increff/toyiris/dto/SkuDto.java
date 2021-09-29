@@ -51,7 +51,7 @@ public class SkuDto {
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
         boolean ans = false;
         String dataRow = TSVFile.readLine();
-        int rowNumber = 0;
+        int rowNumber = 2;
         refreshFile();
         dataRow = TSVFile.readLine();
         FileWriter fos = new FileWriter("files/error-files/sku-error.txt", true);

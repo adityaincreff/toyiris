@@ -164,8 +164,8 @@ public class AlgoDto {
         }
 
         HashMap< String, NoosPojo> finalNoos = new HashMap< String, NoosPojo>();
-        // 1. calculate style rev contri
-        // 2. calculate style ros
+        // 1. calculate style rev contri.
+        // 2. calculate style ros.
         for (SalesData salesData : cleanedSales) {
             NoosPojo noosPojo = finalNoos.computeIfAbsent(salesData.getStyleCode(),o-> new NoosPojo());
             double addition = salesData.getRevenue() * 100 / (double)noosCategoryDataMap.get(salesData.getCategory()).getRevenue();
@@ -181,10 +181,10 @@ public class AlgoDto {
         reportService.deleteNoos();
         for (Map.Entry mapElement : finalNoos.entrySet()) {
             NoosPojo helper = (NoosPojo) mapElement.getValue();
-            if(helper.getStyleRos() >= categoryNoos.get(helper.getCategory()).getStyleRos()){
+            //if(helper.getStyleRos() >= categoryNoos.get(helper.getCategory()).getStyleRos()){
                 dos.println(helper.getCategory()+"\t"+helper.getStyleCode()+"\t"+helper.getStyleRevContri()+"\t"+helper.getStyleRos());
                 reportService.addNoos(helper);
-            }
+            //}
         }
         fos.close();
     }
@@ -228,10 +228,10 @@ public class AlgoDto {
 
             if (sale.getDiscount() <= catSubCatData.getAvgDiscount() * multiplier ) {
                 cleanedSales.add(sale);
-                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
+                catSubCatData.setQuantity(catSubCatData.getQuantity() + sale.getQuantity());
             } else {
                 catSubCatData.setAvgCleanedDiscount(((sale.getDiscount() * sale.getQuantity()) + (catSubCatData.getCleanedQuantity() * catSubCatData.getAvgCleanedDiscount())) / (sale.getQuantity() + catSubCatData.getCleanedQuantity()));
-               // catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
+                catSubCatData.setCleanedQuantity(catSubCatData.getCleanedQuantity() + sale.getQuantity());
                 catSubCatData.setCleanedRevenue(sale.getRevenue() + catSubCatData.getCleanedRevenue());
             }
             liquidationMap.put(catSubCat, catSubCatData);

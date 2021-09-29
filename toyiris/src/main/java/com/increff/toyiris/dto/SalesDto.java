@@ -42,25 +42,25 @@ public class SalesDto {
             throw new ApiException("File contains some errors");
         }
         dataRow = TSVFile.readLine();
-        //for(StorePojo t:storeService.selectAll())
+        // for(StorePojo t:storeService.selectAll())
         //{
-           // for(SkuPojo s:skuService.selectAll()){
-                //for(LocalDate date=LocalDate.now();date.isAfter(LocalDate.now().minusDays(60));date=date.minusDays(1)){
-                 //   SalesPojo salesPojo=new SalesPojo();
-                //  salesPojo.setDate(date);
-                //    salesPojo.setRevenue(1000+Math.random()*4000);
-                //    salesPojo.setDiscount(Math.random()*100);
-                 //   salesPojo.setQuantity((int) (1+Math.random()*15));
-                  //  salesPojo.setStoreId(t.getId());
-                   // salesPojo.setSkuId(s.getId());
+          // for(SkuPojo s:skuService.selectAll()){
+            //    for(LocalDate date=LocalDate.now();date.isAfter(LocalDate.now().minusDays(60));date=date.minusDays(1)){
+              //      SalesPojo salesPojo=new SalesPojo();
+                //     salesPojo.setDate(date);
+                  //  salesPojo.setRevenue(1000+Math.random()*4000);
+                    //salesPojo.setDiscount(Math.random()*salesPojo.getRevenue());
+                   // salesPojo.setQuantity((int) (1+Math.random()*15));
+                    //salesPojo.setStoreId(t.getId());
+                    //salesPojo.setSkuId(s.getId());
                     //salesService.add(salesPojo);
 
-              //}
+              ///}
 
 
-            //}
+        //    }
         //}
-        salesService.delete(true);
+       salesService.delete(true);
         while (dataRow != null) {
 
 
@@ -84,6 +84,25 @@ public class SalesDto {
         else if(dataArray.size()>6){
             throw new ApiException("Extra fields are added.");
         }
+        
+        else if(!StringUtil.toLowerCaseTrim(dataArray.get(3)).matches("-?(0|[1-9]\\d*)")){
+            throw new ApiException("Quantity is not integer");
+        }
+        else if(Integer.parseInt(StringUtil.toLowerCaseTrim(dataArray.get(3)))<=0){
+            throw new ApiException("Quantity cannot be negative or zero");
+        }
+        else if(!StringUtil.toLowerCaseTrim(dataArray.get(4)).matches("[+-]?[0-9]+(.[0-9][0-9]?)?")){
+            throw new ApiException("Discount is not a decimal number");
+        }
+        else if(Double.parseDouble(StringUtil.toLowerCaseTrim(dataArray.get(4)))<0){
+            throw new ApiException("Discount cannot be less than 0");
+        }
+        else if(!StringUtil.toLowerCaseTrim(dataArray.get(5)).matches("[+-]?[0-9]+(.[0-9][0-9]?)?")){
+            throw new ApiException("Revenue is not a decimal number");
+        }
+        else if(Double.parseDouble(StringUtil.toLowerCaseTrim(dataArray.get(5)))<0){
+            throw new ApiException("Revenue cannot be less than 0");
+        }
         else {
             salesPojo.setDate(convertStringToDate(dataArray.get(0)));
             salesPojo.setSkuId(skuService.select(StringUtil.toLowerCaseTrim(dataArray.get(1))));
@@ -105,7 +124,7 @@ public class SalesDto {
         BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
         boolean ans = false;
         String dataRow = TSVFile.readLine();
-        int rowNumber = 0;
+        int rowNumber = 2;
         refreshFile();
         dataRow = TSVFile.readLine();
         FileWriter fos = new FileWriter("files/error-files/sales-error.txt", true);
