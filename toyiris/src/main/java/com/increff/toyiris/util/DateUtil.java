@@ -15,7 +15,7 @@ public class DateUtil {
     public static boolean validateData(String dataString){
         Date date;
         try {
-            date = new SimpleDateFormat("dd/MM/yyyy").parse(dataString);
+            date = new SimpleDateFormat("dd/mm/yyyy").parse(dataString);
         } catch (ParseException parseException) {
             return false;
         }
