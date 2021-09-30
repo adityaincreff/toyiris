@@ -36,7 +36,7 @@ public class SkuDto {
 
         }
 
-        boolean errors = scanFileForErrors(file);
+        boolean errors = scanFileForErrors(TSVFile);
         if (errors) {
             throw new ApiException("File contains some errors");
         }
@@ -45,10 +45,11 @@ public class SkuDto {
             skuService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine(); //Read next line
         }
+        TSVFile.close();
+
     }
 
-    private boolean scanFileForErrors(MultipartFile file) throws IOException, ApiException {
-        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
+    private boolean scanFileForErrors(BufferedReader TSVFile) throws IOException, ApiException {
         boolean ans = false;
         String dataRow = TSVFile.readLine();
         int rowNumber = 2;

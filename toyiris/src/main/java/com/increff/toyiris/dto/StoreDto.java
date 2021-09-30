@@ -30,7 +30,7 @@ public class StoreDto {
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File orientation is not correct");
         }
-        boolean errors = scanFileForErrors(file);
+        boolean errors = scanFileForErrors(TSVFile);
         if (errors) {
             throw new ApiException("File contains some errors");
         }
@@ -39,6 +39,8 @@ public class StoreDto {
             storeService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
         }
+        TSVFile.close();
+
 
     }
 
@@ -61,8 +63,7 @@ public class StoreDto {
 
         }}
 
-    private boolean scanFileForErrors(MultipartFile file) throws IOException, ApiException {
-        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream()));
+    private boolean scanFileForErrors(BufferedReader TSVFile) throws IOException, ApiException {
         boolean ans = false;
         String dataRow = TSVFile.readLine();
         int rowNumber = 2;
@@ -86,7 +87,6 @@ public class StoreDto {
             rowNumber++;
             dataRow = TSVFile.readLine();
         }
-
         fos.close();
         return ans;
 

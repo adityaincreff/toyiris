@@ -1,9 +1,1 @@
 Row Number	Style Code	Brand	Category	Sub-Category	MRP	Gender	Error Message
-3	style3	br7	shirt	check	1200	f	1499	f	m	Extra fields added
-4	style4	br8	jacket	leather	4598	m	721		Extra fields added
-5	style25				f	One or more fields empty.
-7		br2	shirt	check	238	f	One or more fields empty.
-8	style31		pant	check	1320	f	One or more fields empty.
-9	style32			bellbottom	1493	f	One or more fields empty.
-10	style33				399	m	One or more fields empty.
-11	style29	br29	pant	check	abc	f	MRP is not a decimal number

@@ -29,7 +29,7 @@ public class StyleDto {
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File Headings are not proper");
         }
-        boolean errors = scanFileForErrors(file);
+        boolean errors = scanFileForErrors(TSVFile);
         if (errors) {
             throw new ApiException("File contains some errors");
         }
@@ -38,14 +38,12 @@ public class StyleDto {
         while (dataRow != null) {
             styleService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
-
-
         }
+        TSVFile.close();
+
     }
 
-    public boolean scanFileForErrors(MultipartFile file) throws IOException, ApiException {
-        BufferedReader TSVFile = new BufferedReader(new
-                InputStreamReader(file.getInputStream(), "UTF-8"));
+    public boolean scanFileForErrors(BufferedReader TSVFile) throws IOException, ApiException {
         boolean ans = false;
         String dataRow = TSVFile.readLine();
         int rowNumber = 2;

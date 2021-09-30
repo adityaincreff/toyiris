@@ -5,6 +5,7 @@ import com.increff.toyiris.pojo.SkuPojo;
 import com.increff.toyiris.pojo.StorePojo;
 import com.increff.toyiris.service.*;
 import com.increff.toyiris.util.DatatypeConversion;
+import com.increff.toyiris.util.DateUtil;
 import com.increff.toyiris.util.FileUtil;
 import com.increff.toyiris.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class SalesDto {
         if (checkFileHeading(dataRow) == false) {
             throw new ApiException("File orientation is not correct.");
         }
-        boolean errors = scanFileForErrors(file);
+        boolean errors = scanFileForErrors(TSVFile);
         if (errors == true) {
             throw new ApiException("File contains some errors");
         }
@@ -67,6 +68,8 @@ public class SalesDto {
                 salesService.add(convertRowsToPojo(dataRow));
                 dataRow = TSVFile.readLine();
             }
+        TSVFile.close();
+
 
     }
 
@@ -84,7 +87,10 @@ public class SalesDto {
         else if(dataArray.size()>6){
             throw new ApiException("Extra fields are added.");
         }
-        
+        else if(!DateUtil.validateData(StringUtil.toLowerCaseTrim(dataArray.get(0)))){
+            throw new ApiException("Date is Invalid");
+
+        }
         else if(!StringUtil.toLowerCaseTrim(dataArray.get(3)).matches("-?(0|[1-9]\\d*)")){
             throw new ApiException("Quantity is not integer");
         }
@@ -120,8 +126,7 @@ public class SalesDto {
         return LocalDate.parse(date, formatter);
     }
 
-    private boolean scanFileForErrors(MultipartFile file) throws IOException {
-        BufferedReader TSVFile = new BufferedReader(new InputStreamReader(file.getInputStream(), "UTF-8"));
+    private boolean scanFileForErrors(BufferedReader TSVFile) throws IOException {
         boolean ans = false;
         String dataRow = TSVFile.readLine();
         int rowNumber = 2;
