@@ -45,7 +45,7 @@ public class SkuDto {
             skuService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine(); //Read next line
         }
-
+        TSVFile.close();
 
     }
 
@@ -72,6 +72,8 @@ public class SkuDto {
             rowNumber++;
             dataRow = TSVFile.readLine();
         }
+        TSVFile.close();
+        dos.close();
         fos.close();
         return ans;
 

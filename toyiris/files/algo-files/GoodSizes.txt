@@ -1,9 +1,9 @@
-jacket	leather	medium	36.48336727766463	Bad Size
-jacket	denim	xxl	99.99999999999999	Good Size
-jacket	leather	xl	63.51663272233537	Average Size
+jacket	leather	medium	30.355059176529423	Good Size
+jacket	denim	xxl	100.0	Good Size
+jacket	leather	xl	69.64494082347058	Good Size
 pant	bellbottom	l	100.0	Good Size
-jeans	baggy	medium	43.5514130013996	Average Size
-jeans	baggy	xxl	56.448586998600405	Average Size
+jeans	baggy	medium	48.7126536322153	Good Size
+jeans	baggy	xxl	51.2873463677847	Good Size
 socks	fulllength	small	100.0	Good Size
 tshirt	collared	xl	100.0	Good Size
 socks	ankle length	l	100.0	Good Size

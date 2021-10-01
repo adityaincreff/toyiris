@@ -66,7 +66,9 @@ public class SalesDto {
             salesService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
         }
+        TSVFile.close();
     }
+
 
     private SalesPojo convertRowsToPojo(String dataRow) throws ApiException {
         StringTokenizer st = new StringTokenizer(dataRow);
@@ -80,7 +82,8 @@ public class SalesDto {
             throw new ApiException("One or more fields are empty");
         } else if (dataArray.size() > 6) {
             throw new ApiException("Extra fields are added.");
-        } else if (!DateUtil.validateData(StringUtil.toLowerCaseTrim(dataArray.get(0)))) {
+        }
+        else if (!DateUtil.validateData(StringUtil.toLowerCaseTrim(dataArray.get(0)))) {
             throw new ApiException("Date is Invalid");
         }
         else if (!StringUtil.toLowerCaseTrim(dataArray.get(3)).matches("-?(0|[1-9]\\d*)")) {
@@ -135,6 +138,8 @@ public class SalesDto {
             rowNumber++;
             dataRow = TSVFile.readLine(); //READ NEXT LINE
         }
+        TSVFile.close();
+        dos.close();
         fos.close();
         return ans;
     }

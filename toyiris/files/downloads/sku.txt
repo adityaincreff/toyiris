@@ -1,2 +1,27 @@
-Date	Sku Code	Store	Quantity	Discount	Revenue
-14/9/2021	abc	b1	10	100.0	1000.0
+SKU	StyleCode	Size
+abc	style1	l
+bcd	style1	l
+def	style2	xl
+ghi	style3	xxl
+jkl	style4	l
+mno	style5	small
+pqr	style6	medium
+stu	style7	medium
+vxy	style8	small
+zab	style9	xxl
+cde	style10	xl
+fgh	style11	l
+ijk	style12	xl
+lmn	style13	xxl
+opq	style14	medium
+rst	style15	small
+uvx	style16	medium
+yzz	style17	xl
+ccc	style18	l
+ddf	style19	small
+kkl	style20	xxl
+ppr	style21	l
+qqq	style22	small
+www	style23	xxl
+eee	style24	medium
+ttt	style25	xl

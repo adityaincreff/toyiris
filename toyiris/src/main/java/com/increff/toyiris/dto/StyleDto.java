@@ -39,6 +39,7 @@ public class StyleDto {
             styleService.add(convertRowsToPojo(dataRow));
             dataRow = TSVFile.readLine();
         }
+        TSVFile.close();
 
 
     }
@@ -68,6 +69,8 @@ public class StyleDto {
             dataRow = TSVFile.readLine();
 
         }
+        TSVFile.close();
+        dos.close();
         fos.close();
         return ans;
 

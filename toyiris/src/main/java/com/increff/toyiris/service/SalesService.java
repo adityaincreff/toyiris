@@ -37,4 +37,6 @@ public class SalesService {
             throw new ApiException("Sales for this date already exists");
         }
     }
+
+
 }
