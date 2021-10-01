@@ -82,7 +82,7 @@ public class StyleDto {
     private void refreshFile() throws IOException {
         FileWriter fos = new FileWriter("files/error-files/style-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
-        dos.println("Row Number\tStyle Code\tBrand\tCategory\tSub-Category\tMRP\tGender\tError Message");
+        dos.println("Row Number\tStyleCode\tBrand\tCategory\tSub-Category\tMRP\tGender\tError Message");
         fos.close();
     }
 
@@ -92,7 +92,7 @@ public class StyleDto {
         while (st.hasMoreElements()) {
             dataArray.add(st.nextElement().toString());
         }
-        if (!dataArray.get(0).equals("Style Code") || !dataArray.get(1).equals("Brand") || !dataArray.get(2).equals("Category") || !dataArray.get(3).equals("Sub-Category") || !dataArray.get(4).equals("MRP") || !dataArray.get(5).equals("Gender")) {
+        if (!dataArray.get(0).equals("StyleCode") || !dataArray.get(1).equals("Brand") || !dataArray.get(2).equals("Category") || !dataArray.get(3).equals("Sub-Category") || !dataArray.get(4).equals("MRP") || !dataArray.get(5).equals("Gender")) {
             return false;
         }
         return true;
@@ -102,7 +102,7 @@ public class StyleDto {
         List<StylePojo> stylePojo = styleService.selectAll();
         FileWriter fos = new FileWriter("files/downloads/style.txt", false);
         PrintWriter dos = new PrintWriter(fos);
-        dos.println("Style Code\tBrand\tCategory\tSub-Category\tMRP\tGender");
+        dos.println("StyleCode\tBrand\tCategory\tSub-Category\tMRP\tGender");
         for (StylePojo s : stylePojo) {
             dos.print(s.getStyleCode() + '\t' + s.getBrand() + '\t' + s.getCategory() + '\t' + s.getSubCategory() + '\t' + s.getMrp() + '\t' + s.getGender());
             dos.println();

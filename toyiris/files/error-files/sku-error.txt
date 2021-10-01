@@ -1,1 +1,1 @@
-Row Number	SKU	Style Code	Size	Error Message
+Row Number	SKU	StyleCode	Size	Error Message

@@ -114,7 +114,7 @@ public class SkuDto {
     private void refreshFile() throws IOException {
         FileWriter fos = new FileWriter("files/error-files/sku-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
-        dos.println("Row Number\tSKU\tStyle Code\tSize\tError Message");
+        dos.println("Row Number\tSKU\tStyleCode\tSize\tError Message");
         fos.close();
 
 
@@ -127,7 +127,7 @@ public class SkuDto {
             dataArray.add(st.nextElement().toString());
         }
 
-        if (!dataArray.get(1).equals("Style Code") || !dataArray.get(0).equals("SKU") || !dataArray.get(2).equals("Size")) {
+        if (!dataArray.get(1).equals("StyleCode") || !dataArray.get(0).equals("SKU") || !dataArray.get(2).equals("Size")) {
             return false;
         }
         return true;
@@ -138,7 +138,7 @@ public class SkuDto {
         List<SkuPojo> skuPojo = skuService.selectAll();
         FileWriter fos = new FileWriter("files/downloads/sku.txt", false);
         PrintWriter dos = new PrintWriter(fos);
-        dos.println("SKU\tStyle Code\tSize");
+        dos.println("SKU\tStyleCode\tSize");
         for (SkuPojo s : skuPojo) {
             dos.print(s.getSkuCode() + '\t' + styleService.selectbyId(s.getStyleId()) + '\t' + s.getSize());
             dos.println();

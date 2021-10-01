@@ -1,6 +1,1 @@
 Row Number	Date	SKU	Branch	Quantity	Discount	Revenue	Error Message
-2	122/08.2021	abc	b3	15	27	1542	Date is Invalid
-3	149/2021	bcd	b5	12	123	1342	Date is Invalid
-4	27-09-212121	abc	b3	12	1234	12345	Date is Invalid
-5	123-09/213	abc	b1	11	123	1234	Date is Invalid
-6	12/09/2121	abc	b2	3	120	1122	Sales date cannot be greater than today's date

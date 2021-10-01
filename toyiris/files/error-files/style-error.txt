@@ -1,1 +1,1 @@
-Row Number	Style Code	Brand	Category	Sub-Category	MRP	Gender	Error Message
+Row Number	StyleCode	Brand	Category	Sub-Category	MRP	Gender	Error Message

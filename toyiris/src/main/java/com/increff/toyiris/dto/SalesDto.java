@@ -82,8 +82,8 @@ public class SalesDto {
             throw new ApiException("Extra fields are added.");
         } else if (!DateUtil.validateData(StringUtil.toLowerCaseTrim(dataArray.get(0)))) {
             throw new ApiException("Date is Invalid");
-
-        } else if (!StringUtil.toLowerCaseTrim(dataArray.get(3)).matches("-?(0|[1-9]\\d*)")) {
+        }
+        else if (!StringUtil.toLowerCaseTrim(dataArray.get(3)).matches("-?(0|[1-9]\\d*)")) {
             throw new ApiException("Quantity is not integer");
         } else if (Integer.parseInt(StringUtil.toLowerCaseTrim(dataArray.get(3))) <= 0) {
             throw new ApiException("Quantity cannot be negative or zero");

@@ -1,4 +1,4 @@
-Style Code	Brand	Category	Sub-Category	MRP	Gender
+StyleCode	Brand	Category	Sub-Category	MRP	Gender
 style1	br5	shirt	collared	1500.0	f
 style2	br2	tshirt	collared	2000.0	m
 style3	br3	pant	cargo	1500.0	f
