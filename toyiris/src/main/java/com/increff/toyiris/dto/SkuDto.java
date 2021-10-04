@@ -117,6 +117,7 @@ public class SkuDto {
         FileWriter fos = new FileWriter("files/error-files/sku-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
         dos.println("Row Number\tSKU\tStyleCode\tSize\tError Message");
+        dos.close();
         fos.close();
 
 
@@ -142,9 +143,10 @@ public class SkuDto {
         PrintWriter dos = new PrintWriter(fos);
         dos.println("SKU\tStyleCode\tSize");
         for (SkuPojo s : skuPojo) {
-            dos.print(s.getSkuCode() + '\t' + styleService.selectbyId(s.getStyleId()) + '\t' + s.getSize());
+            dos.print(s.getSkuCode() + '\t' + styleService.selectById(s.getStyleId()) + '\t' + s.getSize());
             dos.println();
         }
+        dos.close();
         fos.close();
         FileUtil.downloadFile("downloads/sku", response);
 

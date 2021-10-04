@@ -3,6 +3,7 @@ package com.increff.toyiris.dto;
 import com.increff.toyiris.pojo.SalesPojo;
 import com.increff.toyiris.pojo.SkuPojo;
 import com.increff.toyiris.pojo.StorePojo;
+import com.increff.toyiris.pojo.StylePojo;
 import com.increff.toyiris.service.*;
 import com.increff.toyiris.util.DatatypeConversion;
 import com.increff.toyiris.util.DateUtil;
@@ -70,7 +71,7 @@ public class SalesDto {
     }
 
 
-    private SalesPojo convertRowsToPojo(String dataRow) throws ApiException {
+    public SalesPojo convertRowsToPojo(String dataRow) throws ApiException {
         StringTokenizer st = new StringTokenizer(dataRow);
         List<String> dataArray = new ArrayList<String>();
         SalesPojo salesPojo = new SalesPojo();
@@ -108,7 +109,10 @@ public class SalesDto {
             return salesPojo;
 
         }
+
+
     }
+
 
     private LocalDate convertStringToDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -157,6 +161,7 @@ public class SalesDto {
         FileWriter fos = new FileWriter("files/error-files/sales-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
         dos.println("Row Number\tDate\tSKU\tBranch\tQuantity\tDiscount\tRevenue\tError Message");
+        dos.close();
         fos.close();
     }
 
@@ -189,7 +194,9 @@ public class SalesDto {
         for (SalesPojo s : salesPojo) {
             dos.println(s.getDate().getDayOfMonth() + "/" + s.getDate().getMonthValue() + "/" + s.getDate().getYear() + '\t' + skuService.selectById(s.getSkuId()) + '\t' + storeService.selectById(s.getStoreId()) + '\t' + s.getQuantity() + '\t' + s.getDiscount() + '\t' + s.getRevenue());
         }
+        dos.close();
         fos.close();
+
         FileUtil.downloadFile("downloads/sku", response);
 
     }

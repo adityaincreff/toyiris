@@ -86,6 +86,7 @@ public class StyleDto {
         FileWriter fos = new FileWriter("files/error-files/style-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
         dos.println("Row Number\tStyleCode\tBrand\tCategory\tSub-Category\tMRP\tGender\tError Message");
+        dos.close();
         fos.close();
     }
 

@@ -70,6 +70,7 @@ public class StoreDto {
         int rowNumber = 2;
         refreshFile();
         dataRow= TSVFile.readLine();
+        System.out.println(dataRow);
         FileWriter fos = new FileWriter("files/error-files/store-error.txt", true);
         PrintWriter dos = new PrintWriter(fos);
         while (dataRow != null) {
@@ -88,7 +89,7 @@ public class StoreDto {
             rowNumber++;
             dataRow = TSVFile.readLine();
         }
-        TSVFile.close();
+        //TSVFile.close();
         dos.close();
         fos.close();
         return ans;
@@ -113,7 +114,9 @@ public class StoreDto {
         FileWriter fos = new FileWriter("files/error-files/store-error.txt", false);
         PrintWriter dos = new PrintWriter(fos);
         dos.println("Row Number\tBranch\tCity\tError Message");
+        dos.close();
         fos.close();
+
     }
 
     private boolean checkFileHeading(String dataRow) {
@@ -146,6 +149,7 @@ public class StoreDto {
             dos.print(s.getBranch() + '\t' + s.getCity());
             dos.println();
         }
+        dos.close();
         fos.close();
         FileUtil.downloadFile("downloads/store", response);
     }

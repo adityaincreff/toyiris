@@ -1,5 +1,6 @@
 package com.increff.toyiris.dao;
 
+import com.increff.toyiris.pojo.SalesPojo;
 import com.increff.toyiris.pojo.SkuPojo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +9,11 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 @Repository
 public class SkuDao extends AbstractDao {
-    private String SELECT="Select p from SkuPojo p where p.skuCode=:skuCode";
-    private String SELECT_ALL="Select p from SkuPojo p";
-    private String SELECT_BY_ID = "Select p from SkuPojo p where p.id=:id";
+    private static String SELECT="Select p from SkuPojo p where p.skuCode=:skuCode";
+    private static String SELECT_ALL="Select p from SkuPojo p";
+    private static String SELECT_BY_ID = "Select p from SkuPojo p where p.id=:id";
+
+
     @Transactional
     public void add(SkuPojo skuPojo) {
         em().persist(skuPojo);
@@ -36,4 +39,6 @@ public class SkuDao extends AbstractDao {
     public void update(SkuPojo skuPojo1) {
     em().merge(skuPojo1);
     }
+
+
 }

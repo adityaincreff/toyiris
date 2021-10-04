@@ -12,6 +12,7 @@ public class StyleDao extends AbstractDao {
     private static String SELECT_ALL = "Select p from StylePojo p";
     private static String SELECT_BY_ID = "Select p from StylePojo p where p.id=:id";
 
+
     @Transactional
     public void add(StylePojo stylePojo) {
         em().persist(stylePojo);
@@ -37,4 +38,7 @@ public class StyleDao extends AbstractDao {
     public void update(StylePojo stylePojo1) {
         em().merge(stylePojo1);
     }
+
+
+
 }

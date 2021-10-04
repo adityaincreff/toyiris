@@ -14,7 +14,7 @@ public class StyleService {
 
     @Autowired
     private StyleDao styleDao;
-
+    @Transactional
     public int select(String styleCode) throws ApiException {
         if (styleCode == "") {
             throw new ApiException("One or more fields are empty");
@@ -25,8 +25,8 @@ public class StyleService {
         }
         return stylePojo.getId();
     }
-
-    public String selectbyId(int styleId) {
+    @Transactional
+    public String selectById(int styleId) {
         return styleDao.selectById(styleId).getStyleCode();
     }
 
@@ -52,11 +52,11 @@ public class StyleService {
             styleDao.add(stylePojo);
         }
     }
-
+    @Transactional
     public List<StylePojo> selectAll() {
         return styleDao.selectAll();
     }
-
+    @Transactional
     public HashMap<Integer, StylePojo> selectAllMap() {
         List<StylePojo> stylePojo=styleDao.selectAll();
         HashMap<Integer,StylePojo> styleMap=new HashMap<Integer,StylePojo>();
@@ -65,4 +65,6 @@ public class StyleService {
         }
         return styleMap;
     }
+
+
 }

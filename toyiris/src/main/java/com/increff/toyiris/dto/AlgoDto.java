@@ -160,6 +160,7 @@ public class AlgoDto {
             dos.println(helper.getCategory() + '\t' + helper.getSubcategory() + '\t' + helper.getSize() + "\t" + helper.getRevContri() + "\t" + helper.getTypeOfSizes());
             reportService.addIdentification(helper);
         }
+        dos.close();
         fos.close();
 
     }
@@ -221,6 +222,7 @@ public class AlgoDto {
             reportService.addNoos(helper);
             //}
         }
+        dos.close();
         fos.close();
     }
 
@@ -277,6 +279,7 @@ public class AlgoDto {
             dos.println(helper.getCategory() + '\t' + helper.getSubCategory() + '\t' + helper.getCleanedRevenue() + "\t" + helper.getAvgCleanedDiscount());
             reportService.addLiquidation(convertDataToPojo(helper));
         }
+        dos.close();
         fos.close();
         for (SalesData it : cleanedSales) {
             System.out.println(it.getRevenue());

@@ -19,11 +19,13 @@ public class SalesService {
 
 
     }
+    @Transactional
 
     public List<SalesPojo> selectAll() {
         return salesDao.selectAll();
     }
 
+    @Transactional
 
     public void delete(boolean truncate) {
         salesDao.deleteAll();
@@ -37,6 +39,7 @@ public class SalesService {
             throw new ApiException("Sales for this date already exists");
         }
     }
+
 
 
 }

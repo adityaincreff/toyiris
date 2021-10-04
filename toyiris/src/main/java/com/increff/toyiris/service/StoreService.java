@@ -22,7 +22,7 @@ public class StoreService {
             storeDao.add(storePojo);
         }
     }
-
+    @Transactional
     public List<StorePojo> selectAll() {
         return storeDao.selectAll();
     }
@@ -33,7 +33,7 @@ public class StoreService {
         //    throw new ApiException("Store already exists");
        // }
     //}
-
+    @Transactional
     public int select(String s) throws ApiException {
         StorePojo storePojo=storeDao.select(s);
         if(storePojo== null){
@@ -42,7 +42,7 @@ public class StoreService {
         return storePojo.getId();
 
     }
-
+    @Transactional
     public String selectById(int id) {
         return storeDao.selectById(id).getBranch();
     }
